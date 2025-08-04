@@ -1,0 +1,52 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolApp.Pages.EmpresasPage"
+    Title="Empresas">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+    
+        <Button Text="➕ Agregar Empresa"
+        Clicked="OnAgregarEmpresaClicked"
+        BackgroundColor="#0056b3"
+            TextColor="White"
+        CornerRadius="10"
+        Padding="10,5"
+        WidthRequest="180"
+        HeightRequest="40"
+        HorizontalOptions="Start"
+        FontSize="14" />
+
+        <CollectionView x:Name="empresasView" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="LightGray" Padding="10" Margin="5">
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center" Padding="0">
+                            <!-- Botón que lleva al sitio -->
+                            <Button Grid.Column="0"
+                            Text="{Binding Nombre}"
+                            FontSize="16"
+                            BackgroundColor="#0056b3"
+                            TextColor="White"
+                            CornerRadius="8"
+                            Padding="10,5"
+                            HorizontalOptions="FillAndExpand" />
+
+                            <!-- Botón eliminar -->
+                            <Button Grid.Column="1"
+                            Text="🗑️"
+                            BackgroundColor="Transparent"
+                            TextColor="IndianRed"
+                            FontSize="16"
+                            Clicked="OnEliminarEmpresaClicked"
+                            CommandParameter="{Binding}"
+                            HorizontalOptions="End"
+                            Padding="10,5" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

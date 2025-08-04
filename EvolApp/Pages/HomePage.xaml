@@ -1,0 +1,52 @@
+﻿<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolApp.Pages.HomePage"
+    Title="Evol">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Configurar"
+                IconImageSource="settings.png"
+                Clicked="OnConfigurarClicked" />
+    </ContentPage.ToolbarItems>
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <!-- Logo -->
+        <Image Source="evol_logo.png"
+   WidthRequest="200"
+   HeightRequest="200"
+   Aspect="AspectFit" />
+
+        <!-- Texto de bienvenida -->
+        <Label Text="¡Bienvenido a Evol!"
+   FontSize="24"
+   HorizontalOptions="Center" />
+        <Label Text="Seleccione la empresa con la que quiere operar"
+FontSize="12"
+HorizontalOptions="Center" />
+
+        <CollectionView x:Name="empresasView" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="LightGray" Padding="10" Margin="5">
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center" Padding="0">
+                            <!-- Botón que lleva al sitio -->
+                            <Button Grid.Column="0"
+                    Text="{Binding Nombre}"
+                    FontSize="16"
+                    BackgroundColor="#0056b3"
+                    TextColor="White"
+                    CornerRadius="8"
+                    Padding="10,5"
+                    Clicked="OnEmpresaBotonClicked"
+                    CommandParameter="{Binding}"
+                    HorizontalOptions="Fill" />                          
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+    </VerticalStackLayout>
+</ContentPage>

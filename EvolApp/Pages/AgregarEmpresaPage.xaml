@@ -1,0 +1,19 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolApp.Pages.AgregarEmpresaPage"
+    Title="Agregar Empresa">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Entry x:Name="usuarioEntry" Placeholder="Usuario" />
+            <Entry x:Name="passwordEntry" Placeholder="Contraseña" IsPassword="True" />
+            <Entry x:Name="cuitEntry" Placeholder="CUIT" Keyboard="Numeric" />
+
+            <Button Text="Validar y Agregar" BackgroundColor="#0056b3"
+TextColor="White" Clicked="OnAgregarClicked" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

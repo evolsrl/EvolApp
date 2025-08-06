@@ -12,4 +12,5 @@
 /EvolApp.Shared/obj
 /EvolApp.Socios/bin
 /EvolApp.Socios/obj
-/EvolApp/Pages/AgregarEmpresaPage.xaml.cs
+/EvolAppSocios/bin/Debug
+/EvolAppSocios/obj

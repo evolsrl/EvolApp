@@ -1,1 +1,0 @@
-C:\Evol\ERP Evol Desa\EvolAppV2\EvolApp\EvolApp.csproj;x64

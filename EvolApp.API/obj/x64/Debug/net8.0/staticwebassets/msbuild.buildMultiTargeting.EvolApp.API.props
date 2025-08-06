@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\EvolApp.API.props" />
-</Project>

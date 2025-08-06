@@ -4,3 +4,12 @@
 
 /.vs/EvolApp
 *.dll
+/EvolApp/bin
+/EvolApp/obj
+/EvolApp.API/bin
+/EvolApp.API/obj
+/EvolApp.Shared/bin
+/EvolApp.Shared/obj
+/EvolApp.Socios/bin
+/EvolApp.Socios/obj
+/EvolApp/Pages/AgregarEmpresaPage.xaml.cs

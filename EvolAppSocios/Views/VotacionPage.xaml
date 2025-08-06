@@ -1,0 +1,37 @@
+<!-- Views/VotacionPage.xaml -->
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolAppSocios.Views.VotacionPage"
+    Title="Votación">
+
+    <VerticalStackLayout Padding="20" Spacing="16">
+        <!-- Mostrar datos de la única elección -->
+        <Label Text="Elección activa:" FontAttributes="Bold" />
+        <Label Text="{Binding Eleccion.Nombre}" />
+        <Label Text="{Binding Eleccion.AnioDesde, StringFormat='Desde {0}'}" />
+        <Label Text="{Binding Eleccion.AnioHasta, StringFormat='Hasta {0}'}" />
+
+        <!-- Lista de candidatas/os -->
+        <Picker Title="Seleccionar Lista"
+                ItemsSource="{Binding Listas}"
+                ItemDisplayBinding="{Binding Nombre}"
+                SelectedItem="{Binding ListaSeleccionada}" />
+
+        <Label Text="Candidatos:" FontAttributes="Bold" IsVisible="{Binding ListaSeleccionada}" />
+        <CollectionView ItemsSource="{Binding ListaSeleccionada.Candidatos}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Nombre}" />
+                        <Label Text="{Binding Apellido}" />
+                        <Label Text="{Binding Documento, StringFormat='DNI: {0}'}" />
+                        <Label Text="{Binding Cargo}" FontAttributes="Italic" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Button Text="Votar" Command="{Binding VotarAsyncCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

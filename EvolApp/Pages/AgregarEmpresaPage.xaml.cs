@@ -1,4 +1,3 @@
-using EvolApp.Models;
 using EvolApp.Services;
 using EvolApp.Utils;
 

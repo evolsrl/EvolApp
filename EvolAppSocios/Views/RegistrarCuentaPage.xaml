@@ -1,0 +1,19 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolAppSocios.Views.RegistrarCuentaPage"
+    Title="Registrar Cuenta">
+
+    <VerticalStackLayout Padding="20" Spacing="16">
+        <Label Text="Ingrese su número de documento" />
+        <Entry Text="{Binding Documento}" Keyboard="Numeric" />
+        <Button Text="Buscar Afiliado" Command="{Binding BuscarAfiliadoCommand}" />
+
+        <StackLayout IsVisible="{Binding AfiliadoEncontrado}">
+            <Label Text="{Binding Afiliado.Apellido}" />
+            <Label Text="{Binding Afiliado.Nombre}" />
+            <Label Text="{Binding Afiliado.CorreoOculto}" />
+            <Label Text="{Binding Afiliado.FechaNacimiento, StringFormat='dd/MM/yyyy'}" />
+        </StackLayout>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,4 +1,4 @@
-using EvolApp.Models;
+using EvolApp.Shared.Models;
 
 namespace EvolApp.Pages;
 

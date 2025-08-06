@@ -1,0 +1,18 @@
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="EvolAppSocios.Views.CuentaAfiliadoPage"
+    Title="Cuenta del Afiliado">
+
+    <VerticalStackLayout Padding="20" Spacing="12">
+        <Label Text="Cuenta verificada correctamente" FontAttributes="Bold" FontSize="18" />
+
+        <Label Text="{Binding Afiliado.Nombre}" />
+        <Label Text="{Binding Afiliado.Apellido}" />
+        <Label Text="{Binding Afiliado.Documento}" />
+        <Label Text="{Binding Afiliado.FechaNacimiento, StringFormat='dd/MM/yyyy'}" />
+        <Label Text="{Binding Afiliado.Correo}" />
+
+        <Button Text="Consultar si puede votar" Command="{Binding IrAlPadronCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

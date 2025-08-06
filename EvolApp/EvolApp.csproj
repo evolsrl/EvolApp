@@ -94,4 +94,8 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\EvolApp.Shared\EvolApp.Shared.csproj" />
+	</ItemGroup>
+
 </Project>

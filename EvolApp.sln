@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolApp", "EvolApp\EvolApp.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolApp.API", "EvolApp.API\EvolApp.API.csproj", "{F21362BC-B3AB-FDBC-A270-CCBC42ED849B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolAppSocios", "EvolAppSocios\EvolAppSocios.csproj", "{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvolApp.Shared", "EvolApp.Shared\EvolApp.Shared.csproj", "{D4E8845C-62AD-407A-9054-275C121015C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +27,16 @@ Global
 		{F21362BC-B3AB-FDBC-A270-CCBC42ED849B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F21362BC-B3AB-FDBC-A270-CCBC42ED849B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F21362BC-B3AB-FDBC-A270-CCBC42ED849B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1603ACE5-B5AC-421D-BDDA-23AFC80EFBB4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D4E8845C-62AD-407A-9054-275C121015C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4E8845C-62AD-407A-9054-275C121015C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4E8845C-62AD-407A-9054-275C121015C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4E8845C-62AD-407A-9054-275C121015C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

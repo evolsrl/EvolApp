@@ -1,0 +1,13 @@
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:EvolAppSocios.ViewModels"
+    x:Class="EvolAppSocios.Views.VerificacionPage"
+    Title="Verificación">
+
+    <VerticalStackLayout Padding="20" Spacing="16">
+        <Label Text="Ingrese el código recibido por correo" />
+        <Entry Placeholder="Código" Keyboard="Numeric" Text="{Binding Codigo}" />
+        <Button Text="Verificar" Command="{Binding VerificarCommand}" />
+    </VerticalStackLayout>
+</ContentPage>

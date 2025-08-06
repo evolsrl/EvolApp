@@ -1,4 +1,4 @@
-﻿using EvolApp.Models;
+﻿using EvolApp.Shared.Models;
 using EvolApp.Utils;
 using System.Text;
 using System.Text.Json;

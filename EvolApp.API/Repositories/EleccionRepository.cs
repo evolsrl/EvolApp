@@ -3,6 +3,7 @@ using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
 using System.Data;
 
+namespace EvolApp.API.Repositories;
 public class EleccionRepository : IEleccionRepository
 {
     private readonly IDbConnection _db;

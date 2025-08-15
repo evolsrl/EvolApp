@@ -1,51 +1,37 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AutoMapper;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using EvolApp.Shared.DTOs;           // ← DTO compartido
+using EvolApp.Shared.Models;
 using EvolAppSocios.Services;
-using Microsoft.Maui.Controls;       // Para Shell
+using EvolAppSocios.Views;
 
-namespace EvolAppSocios.ViewModels
+public partial class RegistrarCuentaViewModel : ObservableObject
 {
-    public partial class RegistrarCuentaViewModel : ObservableObject
+    private readonly AfiliadoApiService _afiliadoApi;
+    private readonly IMapper _mapper;
+
+    [ObservableProperty] private string documento = string.Empty;
+    [ObservableProperty] private Afiliado? afiliado;
+    [ObservableProperty] private bool afiliadoEncontrado;
+
+    public RegistrarCuentaViewModel(AfiliadoApiService afiliadoApi, IMapper mapper)
     {
-        private readonly AfiliadoApiService _afiliadoApi;
+        _afiliadoApi = afiliadoApi;
+        _mapper = mapper;
+    }
 
-        [ObservableProperty]
-        private string documento = string.Empty;
+    [RelayCommand]
+    public async Task BuscarAfiliado()
+    {
+        var dto = await _afiliadoApi.ObtenerAfiliado(Documento);
+        afiliado = dto is not null ? _mapper.Map<Afiliado>(dto) : null;
+        afiliadoEncontrado = afiliado is not null;
 
-        [ObservableProperty]
-        private AfiliadoDto? afiliado;       // ← DTO en vez de EvolApp.Shared.Models.Afiliado
-
-        [ObservableProperty]
-        private bool afiliadoEncontrado;
-
-        public RegistrarCuentaViewModel(AfiliadoApiService afiliadoApi)
-            => _afiliadoApi = afiliadoApi;
-
-        [RelayCommand]
-        public async Task BuscarAfiliado()
+        if (AfiliadoEncontrado)
         {
-            if (string.IsNullOrWhiteSpace(Documento))
-            {
-                await Shell.Current.DisplayAlert("Error", "Debes ingresar un documento", "OK");
-                return;
-            }
-
-            // Ahora tu servicio devuelve AfiliadoDto
-            Afiliado = await _afiliadoApi.ObtenerAfiliado(Documento);
-            AfiliadoEncontrado = Afiliado != null;
-
-            if (AfiliadoEncontrado)
-            {
-                await _afiliadoApi.EnviarCodigo(Documento);
-
-                // Navegación usando query param (asegúrate de registrar ruta "verificacion")
-                await Shell.Current.GoToAsync($"verificacion?Documento={Documento}");
-            }
-            else
-            {
-                await Shell.Current.DisplayAlert("Error", "Afiliado no encontrado.", "OK");
-            }
+            await _afiliadoApi.EnviarCodigo(Documento);
+            await Shell.Current.GoToAsync(nameof(VerificacionPage),
+                new Dictionary<string, object> { { "Documento", documento } });
         }
     }
 }

@@ -19,14 +19,10 @@ public partial class CuentaAfiliadoPage : ContentPage
 
         await _viewModel.CargarAfiliado();
 
-        // ✅ Cargar menú dinámico solo una vez por sesión
-        if (!MenuSessionTracker.MenuCargado)
+        if (!MenuSessionTracker.MenuCargado && !string.IsNullOrWhiteSpace(_viewModel.Documento))
         {
-            if (!string.IsNullOrWhiteSpace(_viewModel.Documento))
-            {
-                await (Shell.Current as AppShell)?.CargarMenuDinamicoAsync(_viewModel.Documento);
-                MenuSessionTracker.MenuCargado = true;
-            }
+            await (Shell.Current as AppShell)!.CargarMenuDinamicoAsync(_viewModel.Documento);
+            MenuSessionTracker.MenuCargado = true;
         }
     }
 }

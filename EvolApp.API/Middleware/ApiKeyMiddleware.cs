@@ -3,23 +3,19 @@
     private readonly RequestDelegate _next;
     private const string ApiKeyHeaderName = "X-API-KEY";
 
-    public ApiKeyMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    public ApiKeyMiddleware(RequestDelegate next) => _next = next;
 
-    public async Task Invoke(HttpContext context, IConfiguration config)
+    public async Task InvokeAsync(HttpContext context, IConfiguration config)
     {
         if (!context.Request.Headers.TryGetValue(ApiKeyHeaderName, out var extractedKey))
         {
             context.Response.StatusCode = 401;
-            await context.Response.WriteAsync("API Key faltante");
+            await context.Response.WriteAsync("API Key requerida");
             return;
         }
 
         var apiKey = config.GetValue<string>("ApiSettings:MobileApiKey");
-
-        if (!apiKey.Equals(extractedKey))
+        if (!string.Equals(apiKey, extractedKey, StringComparison.Ordinal))
         {
             context.Response.StatusCode = 403;
             await context.Response.WriteAsync("API Key inválida");

@@ -1,43 +1,59 @@
-using EvolApp.API.Data;
+﻿using System.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+
+using EvolApp.API.Data;
+using EvolApp.API.Repositories;                 // AfiliadoRepository, MenuRepository (están en este namespace)
+using EvolApp.API.Repositories.Interfaces;      // Interfaces
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.AddServerHeader = false; // Quitar header de servidor (opcional seguridad extra)
-});
-// Add services to the container.
+// Quitar header de servidor (opcional)
+builder.WebHost.ConfigureKestrel(options => options.AddServerHeader = false);
+
+// DbContext (si lo usás para otras cosas)
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// CORS (ya usás UseCors("AllowAll"))
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowAll", p => p
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod());
+});
+
+// 🔹 REGISTROS DAPPER: conexión por request
+builder.Services.AddScoped<IDbConnection>(sp =>
+{
+    var cs = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
+    return new SqlConnection(cs);
+});
+
+// 🔹 REGISTROS DE REPOSITORIOS
+builder.Services.AddScoped<IAfiliadoRepository, AfiliadoRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IEleccionRepository, EleccionRepository>();
+builder.Services.AddScoped<IVotacionRepository, VotacionRepository>();
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll", policy =>
-    {
-        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-    });
-});
-
 var app = builder.Build();
-app.UseHttpsRedirection();
 
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
+// Swagger siempre habilitado (como ya lo tenías)
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseCors("AllowAll");
+
+// ApiKeyMiddleware (firma válida; ver nota más abajo)
 app.UseMiddleware<ApiKeyMiddleware>();
+
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.Run();

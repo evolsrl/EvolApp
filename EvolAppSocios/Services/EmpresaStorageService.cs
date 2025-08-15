@@ -10,8 +10,13 @@ public static class EmpresaStorageService
     public static Empresa ObtenerEmpresas()
     {
         var json = Preferences.Get(Key, "");
-        if (string.IsNullOrWhiteSpace(json))
-            return new Empresa();
+        if (string.IsNullOrWhiteSpace(json)) {
+            //return new Empresa();
+            Empresa empresa = new Empresa();
+            empresa.Cuit = "";
+            empresa.Url = $"https://erp.evol.com.ar/csofaapiv2/";
+            return empresa;
+        }
 
         var empresas = JsonSerializer.Deserialize<Empresa>(json) ?? new();
         return empresas;

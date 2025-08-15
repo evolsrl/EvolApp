@@ -1,5 +1,6 @@
 ﻿using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -15,7 +16,7 @@ public class AfiliadosController : ControllerBase
     public async Task<ActionResult<AfiliadoDto>> Get(string dni)
     {
         var afi = await _repo.GetByDocumentoAsync(dni);
-        return afi is not null ? Ok(afi) : NotFound();
+        return Ok(afi);
     }
 
     // POST /api/afiliados/{dni}/enviar-codigo
@@ -26,12 +27,12 @@ public class AfiliadosController : ControllerBase
         return Ok();
     }
 
-    // POST /api/afiliados/{dni}/validar
-    [HttpPost("{dni}/validar")]
-    public async Task<IActionResult> Verify(string dni, [FromBody] JsonElement body)
+    // POST /api/afiliados/{dni}/verificar
+    [HttpPost("{dni}/verificar")]
+    public async Task<ActionResult<ResultadoDTO>> Verify(string dni, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("codigo", out var c)) return BadRequest();
         var ok = await _repo.VerifyCodeAsync(dni, c.GetString()!);
-        return ok ? Ok() : Unauthorized();
+        return Ok(ok);
     }
 }

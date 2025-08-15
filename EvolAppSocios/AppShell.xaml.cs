@@ -8,34 +8,33 @@ namespace EvolAppSocios
     {
         private static readonly HashSet<string> _rutasRegistradas =
             new(StringComparer.OrdinalIgnoreCase);
+        private readonly SessionService _session;
 
-        public AppShell(RegistrarCuentaPage startPage) // ✅ inyectamos la página inicial
+
+        public AppShell(RegistrarCuentaPage startPage, SessionService session)
         {
             InitializeComponent();
+            _session = session;
 
-            // Página inicial armada con DI
-            var start = new ShellContent
+            Items.Add(new ShellContent
             {
                 Title = "Registrar Cuenta",
                 Content = startPage,
-                Route = nameof(RegistrarCuentaPage)
-            };
-            Items.Add(start);
+                Route = nameof(AppRoute.RegistrarCuenta)
+            });
 
-            // Rutas que vas a usar por navegación
-            Routing.RegisterRoute(nameof(CuentaAfiliadoPage), typeof(CuentaAfiliadoPage));
-            Routing.RegisterRoute(nameof(VerificacionPage), typeof(VerificacionPage));
-            Routing.RegisterRoute(nameof(VotacionPage), typeof(VotacionPage));
+            RouteMap.RegisterAll();
 
-            // Si la cuenta ya estaba verificada, redirigimos cuando el Shell está listo
-            var verificada = Preferences.Get("CuentaVerificada", false);
-            var doc = Preferences.Get("DocumentoVerificado", string.Empty);
+            // Restaurar sesión (si había)
+            _session.CargarDesdePreferencias();
 
-            if (verificada && !string.IsNullOrWhiteSpace(doc))
+            Loaded += async (_, __) =>
             {
-                MainThread.BeginInvokeOnMainThread(async () =>
-                    await GoToAsync($"{nameof(CuentaAfiliadoPage)}?Documento={Uri.EscapeDataString(doc)}"));
-            }
+                if (_session.EstaVerificada && !string.IsNullOrWhiteSpace(_session.Documento))
+                {
+                    await Shell.Current.GoToAsync(AppRoute.CuentaAfiliado, "Documento", _session.Documento);
+                }
+            };
         }
 
         private static void RegistrarRutaSiHaceFalta(string route, Type pageType)

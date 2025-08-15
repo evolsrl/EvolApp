@@ -1,4 +1,5 @@
 ﻿using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
 
 namespace EvolApp.API.Repositories.Interfaces
 {
@@ -6,6 +7,6 @@ namespace EvolApp.API.Repositories.Interfaces
     {
         Task<AfiliadoDto?> GetByDocumentoAsync(string documento);
         Task SendCodeAsync(string documento);
-        Task<bool> VerifyCodeAsync(string documento, string codigo);
+        Task<ResultadoDTO> VerifyCodeAsync(string documento, string codigo);
     }
 }

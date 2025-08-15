@@ -34,19 +34,21 @@ public static class MauiProgram
             .AddHttpMessageHandler<DiagnosticsHandler>()
             .AddHttpMessageHandler<SecurityHeaderHandler>();
 
-        // ViewModels (podés dejarlos Singleton si te funciona así)
-        builder.Services.AddSingleton<RegistrarCuentaViewModel>();
-        builder.Services.AddSingleton<CuentaAfiliadoViewModel>();
-        builder.Services.AddSingleton<VerificacionViewModel>();
-        builder.Services.AddSingleton<VotacionViewModel>();
+        // ViewModels
+        builder.Services.AddTransient<RegistrarCuentaViewModel>();
+        builder.Services.AddTransient<CuentaAfiliadoViewModel>();
+        builder.Services.AddTransient<VerificacionViewModel>();
+        builder.Services.AddTransient<VotacionViewModel>();
 
-        // Vistas
-        builder.Services.AddSingleton<RegistrarCuentaPage>();
-        builder.Services.AddSingleton<CuentaAfiliadoPage>();
-        builder.Services.AddSingleton<VotacionPage>();
+        // Pages
+        builder.Services.AddTransient<RegistrarCuentaPage>();
+        builder.Services.AddTransient<CuentaAfiliadoPage>();
+        builder.Services.AddTransient<VerificacionPage>();
+        builder.Services.AddTransient<VotacionPage>();
 
         // Shell por DI
         builder.Services.AddSingleton<AppShell>();
+        builder.Services.AddSingleton<SessionService>();
 
         builder
             .UseMauiApp<App>()
@@ -57,7 +59,7 @@ public static class MauiProgram
             });
 
         AppDomain.CurrentDomain.FirstChanceException += (sender, e) =>
-        {
+         {
 #if DEBUG
             System.Diagnostics.Debug.WriteLine("=== EXCEPTION ===");
             System.Diagnostics.Debug.WriteLine(e.Exception.Message.ToString()); // incluye stack trace con el assembly culpable

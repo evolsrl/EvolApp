@@ -1,4 +1,5 @@
 ﻿using EvolAppSocios.Services;
+using EvolAppSocios.Utils;
 using EvolAppSocios.Views;
 using Microsoft.Extensions.DependencyInjection;
 

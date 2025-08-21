@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EvolApp.Shared.DTOs;
+using EvolAppSocios.Utils;
 
 namespace EvolAppSocios.ViewModels;
 
@@ -26,12 +27,9 @@ public partial class CuentaAfiliadoViewModel : ObservableObject
         Afiliado = await _afiliadoApi.ObtenerAfiliado(Documento);
     }
 
-    //[RelayCommand]
-    //public async Task IrAlPadron()
-    //{
-    //    await Shell.Current.GoToAsync(nameof(EstadoElectoralPage), new Dictionary<string, object>
-    //    {
-    //        { "Documento", Documento }
-    //    });
-    //}
+    [RelayCommand]
+    public async Task IrAlPadron()
+    {
+        await Shell.Current.GoToAsync(AppRoute.Votacion, "Documento", documento);
+    }
 }

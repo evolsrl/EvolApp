@@ -10,7 +10,7 @@
         <Label Text="{Binding Afiliado.Nombre}" />
         <Label Text="{Binding Afiliado.Apellido}" />
         <Label Text="{Binding Afiliado.Documento}" />
-        <Label Text="{Binding Afiliado.FechaNacimiento, StringFormat='dd/MM/yyyy'}" />
+        <Label Text="{Binding Afiliado.FechaNacimiento}" />
         <Label Text="{Binding Afiliado.Correo}" />
 
         <Button Text="Consultar si puede votar" Command="{Binding IrAlPadronCommand}" />

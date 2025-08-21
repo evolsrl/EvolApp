@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EvolApp.Shared.Models;
 using EvolAppSocios.Services;
+using EvolAppSocios.Utils;
 using EvolAppSocios.Views;
 
 public partial class RegistrarCuentaViewModel : ObservableObject
@@ -30,8 +31,7 @@ public partial class RegistrarCuentaViewModel : ObservableObject
         if (AfiliadoEncontrado)
         {
             await _afiliadoApi.EnviarCodigo(Documento);
-            await Shell.Current.GoToAsync(nameof(VerificacionPage),
-                new Dictionary<string, object> { { "Documento", documento } });
+            await Shell.Current.GoToAsync(AppRoute.Verificacion, "Documento", Documento);
         }
     }
 }

@@ -30,6 +30,17 @@ public partial class CuentaAfiliadoViewModel : ObservableObject
     [RelayCommand]
     public async Task IrAlPadron()
     {
-        await Shell.Current.GoToAsync(AppRoute.Votacion, "Documento", documento);
+        var dni = string.IsNullOrWhiteSpace(Documento)
+            ? EvolAppSocios.Utils.ServiceHelper.GetRequiredService<SessionService>().Documento
+            : Documento;
+
+        if (string.IsNullOrWhiteSpace(dni))
+        {
+            await Shell.Current.DisplayAlert("Atención", "No se pudo determinar el documento.", "OK");
+            return;
+        }
+
+        await Shell.Current.GoToAsync(AppRoute.Votacion, "Documento", dni);
     }
+
 }

@@ -48,9 +48,9 @@
                                        Text="{Binding Nombre}" FontAttributes="Bold" />
                                 <Label Grid.Row="1" Grid.Column="0"
                                        Text="{Binding Descripcion}" FontSize="12" Opacity="0.8" />
-                                <Image Grid.RowSpan="2" Grid.Column="1"
+                                <!--<Image Grid.RowSpan="2" Grid.Column="1"
                                        Source="{Binding LogoUrl}" WidthRequest="48" HeightRequest="48"
-                                       Aspect="AspectFit"/>
+                                       Aspect="AspectFit"/>-->
                             </Grid>
                         </Frame>
                     </DataTemplate>
@@ -75,11 +75,11 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid ColumnDefinitions="Auto,*" Padding="6" ColumnSpacing="10">
-                                <Image Source="{Binding FotoUrl}" WidthRequest="36" HeightRequest="36" Aspect="AspectFill">
+                                <!--<Image Source="{Binding FotoUrl}" WidthRequest="36" HeightRequest="36" Aspect="AspectFill">
                                     <Image.Clip>
                                         <EllipseGeometry Center="18,18" RadiusX="18" RadiusY="18"/>
                                     </Image.Clip>
-                                </Image>
+                                </Image>-->
                                 <VerticalStackLayout Grid.Column="1" Spacing="0">
                                     <Label Text="{Binding Nombre}" FontAttributes="Bold" />
                                     <Label Text="{Binding Cargo}" FontSize="12" Opacity="0.8" />

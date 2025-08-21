@@ -18,4 +18,9 @@ public class EleccionesController : ControllerBase
     [HttpGet("{id}/listas")]
     public async Task<ActionResult<IEnumerable<ListaElectoralDto>>> GetListas(string id)
         => Ok(await _repo.GetListasAsync(id));
+
+    // GET /api/elecciones/{id}/candidatos
+    [HttpGet("{id}/candidatos")]
+    public async Task<ActionResult<IEnumerable<CandidatoDto>>> GetCandidatos(string id)
+        => Ok(await _repo.GetCandidatosAsync(id));
 }

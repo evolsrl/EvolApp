@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EvolApp.Shared.DTOs;
+using EvolApp.Shared.Models;
 using EvolAppSocios.Services;
 using System.Collections.ObjectModel;
 namespace EvolAppSocios.ViewModels;
@@ -15,21 +16,21 @@ public partial class VotacionViewModel : ObservableObject
         _api = api;
         _session = session;
 
-        Listas = new ObservableCollection<ListaElectoralDto>();
-        Candidatos = new ObservableCollection<CandidatoDto>();
+        Listas = new ObservableCollection<ListaElectoral>();
+        Candidatos = new ObservableCollection<Candidato>();
         TextoVacio = "Cargando listas...";
     }
 
     [ObservableProperty] private bool isBusy;
     [ObservableProperty] private string textoVacio = "Sin datos";
 
-    public ObservableCollection<ListaElectoralDto> Listas { get; }
-    public ObservableCollection<CandidatoDto> Candidatos { get; }
+    public ObservableCollection<ListaElectoral> Listas { get; }
+    public ObservableCollection<Candidato> Candidatos { get; }
 
     [ObservableProperty]
-    private ListaElectoralDto? listaSeleccionada;
+    private ListaElectoral? listaSeleccionada;
 
-    partial void OnListaSeleccionadaChanged(ListaElectoralDto? value)
+    partial void OnListaSeleccionadaChanged(ListaElectoral? value)
     {
         // Cargar candidatos de la lista elegida
         _ = CargarCandidatosAsync(value);
@@ -43,29 +44,41 @@ public partial class VotacionViewModel : ObservableObject
     public async Task CargarDatosAsync()
     {
         if (IsBusy) return;
+
         try
         {
             IsBusy = true;
             Listas.Clear();
+            TextoVacio = "Cargando listas...";
 
-            // Documento para contexto (si lo necesitás)
-            var dni = _session.Documento;
+            // (1) Elecciones disponibles
+            var elecciones = await _api.ObtenerEleccionesAsync();
+            if (elecciones is null || elecciones.Count == 0)
+            {
+                TextoVacio = "No hay elecciones disponibles.";
+                return;
+            }
 
-            var eleccion = await _api.ObtenerEleccionesAsync();
+            var eleccion = elecciones[0]; // si querés otra, elegila acá
 
-            var listas = await _api.ObtenerListasPorEleccionAsync(eleccion[0].Id);
-            //foreach (var l in listas)
-            //{
-            //    Listas.Add(new ListaVm
-            //    {
-            //        Id = l.Id,
-            //        Nombre = l.Nombre,
-            //        Descripcion = l.Descripcion,
-            //        LogoUrl = l.LogoUrl
-            //    });
-            //}
+            // (2) Listas de esa elección
+            var listas = await _api.ObtenerListasPorEleccionAsync(eleccion.Id);
+            if (listas is null || listas.Count == 0)
+            {
+                TextoVacio = "No hay listas para esta elección.";
+                return;
+            }
 
-            TextoVacio = Listas.Count == 0 ? "No hay listas disponibles" : "";
+            foreach (var l in listas)
+            {
+                Listas.Add(new ListaElectoral
+                {
+                    Id = l.Id,
+                    Nombre = l.Nombre
+                });
+            }
+
+            TextoVacio = "";
         }
         catch (Exception ex)
         {
@@ -83,13 +96,14 @@ public partial class VotacionViewModel : ObservableObject
         }
     }
 
+
     [RelayCommand]
     private async Task RefrescarAsync()
     {
         await CargarDatosAsync();
     }
 
-    private async Task CargarCandidatosAsync(ListaElectoralDto? lista)
+    private async Task CargarCandidatosAsync(ListaElectoral? lista)
     {
         Candidatos.Clear();
         if (lista is null) return;
@@ -98,6 +112,18 @@ public partial class VotacionViewModel : ObservableObject
         {
             IsBusy = true;
             var candidatos = await _api.ObtenerCandidatosPorListaAsync(lista.Id);
+            if (candidatos is null || candidatos.Count == 0) return;
+
+            foreach (var c in candidatos)
+            {
+                Candidatos.Add(new Candidato
+                {
+                    Documento = c.Documento,
+                    Nombre = c.Nombre,
+                    Apellido = c.Apellido,
+                    Cargo = c.Cargo
+                });
+            }
         }
         catch (Exception ex)
         {
@@ -113,6 +139,7 @@ public partial class VotacionViewModel : ObservableObject
             ConfirmarVotoCommand.NotifyCanExecuteChanged();
         }
     }
+
 
     [RelayCommand(CanExecute = nameof(PuedeConfirmar))]
     private async Task ConfirmarVotoAsync()
@@ -151,20 +178,4 @@ public partial class VotacionViewModel : ObservableObject
             ConfirmarVotoCommand.NotifyCanExecuteChanged();
         }
     }
-}
-
-public sealed class ListaVm
-{
-    public string Id { get; set; }
-    public string Nombre { get; set; } = "";
-    public string Descripcion { get; set; } = string.Empty;
-    public string LogoUrl { get; set; } = string.Empty;
-}
-
-public sealed class CandidatoVm
-{
-    public string Id { get; set; }
-    public string Nombre { get; set; } = "";
-    public string Cargo { get; set; } = "";
-    public string? FotoUrl { get; set; }
 }

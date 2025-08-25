@@ -3,102 +3,13 @@
     x:Class="EvolAppSocios.Views.VotacionPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:EvolAppSocios.ViewModels">
+    Title="Votación">
 
-    <ContentPage.Resources>
-        <!-- Si querés, un estilo simple para tarjetas -->
-        <Style TargetType="Frame">
-            <Setter Property="CornerRadius" Value="14" />
-            <Setter Property="Padding" Value="12" />
-            <Setter Property="Margin" Value="8,6" />
-            <Setter Property="HasShadow" Value="True" />
-        </Style>
-    </ContentPage.Resources>
-
-    <Grid RowDefinitions="Auto,*,Auto" Padding="16" RowSpacing="12">
-
-        <!-- Encabezado -->
-        <VerticalStackLayout Grid.Row="0" Spacing="4">
-            <Label Text="Votación" FontSize="22" FontAttributes="Bold" />
-            <Label Text="Seleccioná una lista y confirmá tu voto"
-                   FontSize="14" Opacity="0.75"/>
-        </VerticalStackLayout>
-
-        <!-- Listado de listas con PullToRefresh -->
-        <RefreshView Grid.Row="1"
-                     IsRefreshing="{Binding IsBusy}"
-                     Command="{Binding RefrescarCommand}">
-            <CollectionView
-                ItemsSource="{Binding Listas}"
-                SelectionMode="Single"
-                SelectedItem="{Binding ListaSeleccionada, Mode=TwoWay}">
-
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout Padding="24" Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
-                        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
-                        <Label Text="{Binding TextoVacio}" />
-                    </VerticalStackLayout>
-                </CollectionView.EmptyView>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame>
-                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8">
-                                <Label Grid.Row="0" Grid.Column="0"
-                                       Text="{Binding Nombre}" FontAttributes="Bold" />
-                                <Label Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding Descripcion}" FontSize="12" Opacity="0.8" />
-                                <!--<Image Grid.RowSpan="2" Grid.Column="1"
-                                       Source="{Binding LogoUrl}" WidthRequest="48" HeightRequest="48"
-                                       Aspect="AspectFit"/>-->
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </RefreshView>
-
-        <!-- Detalle de candidatos de la lista seleccionada -->
-        <VerticalStackLayout Grid.Row="2" Spacing="10">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <Label Text="{Binding ListaSeleccionada.Nombre, StringFormat='Lista seleccionada: {0}'}"
-                       FontAttributes="Bold" />
-
-                <CollectionView Grid.Row="1"
-                                ItemsSource="{Binding Candidatos}"
-                                SelectionMode="None">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="Auto,*" Padding="6" ColumnSpacing="10">
-                                <!--<Image Source="{Binding FotoUrl}" WidthRequest="36" HeightRequest="36" Aspect="AspectFill">
-                                    <Image.Clip>
-                                        <EllipseGeometry Center="18,18" RadiusX="18" RadiusY="18"/>
-                                    </Image.Clip>
-                                </Image>-->
-                                <VerticalStackLayout Grid.Column="1" Spacing="0">
-                                    <Label Text="{Binding Nombre}" FontAttributes="Bold" />
-                                    <Label Text="{Binding Cargo}" FontSize="12" Opacity="0.8" />
-                                </VerticalStackLayout>
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <Label Text="Seleccioná una lista para ver sus candidatos" />
-                    </CollectionView.EmptyView>
-                </CollectionView>
-            </Grid>
-
-            <!-- Botón confirmar -->
-            <Button Text="Confirmar voto"
-                    Command="{Binding ConfirmarVotoCommand}"
-                    IsEnabled="{Binding PuedeConfirmar}"
-                    HeightRequest="48"/>
-        </VerticalStackLayout>
-
+    <Grid>
+        <Label Text="Votación"
+               FontSize="24"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
     </Grid>
 </ContentPage>

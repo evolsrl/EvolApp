@@ -19,9 +19,9 @@ public partial class CuentaAfiliadoPage : ContentPage
 
         await _viewModel.CargarAfiliado();
 
-        if (!MenuSessionTracker.MenuCargado && !string.IsNullOrWhiteSpace(_viewModel.Documento))
+        if (Shell.Current is AppShell appShell && !string.IsNullOrWhiteSpace(_viewModel.Documento))
         {
-            await (Shell.Current as AppShell)!.CargarMenuDinamicoAsync(_viewModel.Documento);
+            await appShell.CargarMenuDinamicoAsync(_viewModel.Documento);
             MenuSessionTracker.MenuCargado = true;
         }
     }

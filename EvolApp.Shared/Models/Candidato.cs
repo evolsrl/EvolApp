@@ -2,8 +2,8 @@
 
 public class Candidato
 {
-    public string Documento { get; set; }      // DNI o pasaporte
-    public string Nombre { get; set; }
-    public string Apellido { get; set; }
-    public string Cargo { get; set; }          // Ej: "Diputado Nacional"
+    public string Documento { get; set; } = string.Empty;      // DNI o pasaporte
+    public string Nombre { get; set; } = string.Empty;
+    public string Apellido { get; set; } = string.Empty;
+    public string Cargo { get; set; } = string.Empty;
 }

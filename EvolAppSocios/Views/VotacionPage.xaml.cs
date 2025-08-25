@@ -1,22 +1,22 @@
+ï»¿using EvolAppSocios.Utils;
 using EvolAppSocios.ViewModels;
 
 namespace EvolAppSocios.Views;
 
 public partial class VotacionPage : ContentPage
 {
-    private readonly VotacionViewModel _vm;
+    private readonly VotacionViewModel _viewModel;
 
-    public VotacionPage() : this(EvolAppSocios.Utils.ServiceHelper.GetRequiredService<VotacionViewModel>()) { }
-
-    public VotacionPage(VotacionViewModel vm)
+    public VotacionPage(VotacionViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = _vm = vm;
+        BindingContext = _viewModel = viewModel;
     }
 
-    protected override async void OnAppearing()
+    protected override void OnAppearing()
     {
         base.OnAppearing();
-        await _vm.CargarDatosAsync(); // carga listas si aún no están
+        //await _viewModel.CargarAfiliado();
     }
+    
 }

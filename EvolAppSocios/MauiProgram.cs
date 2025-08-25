@@ -5,6 +5,8 @@ using EvolAppSocios.Mappers;
 using EvolAppSocios.Services;
 using EvolAppSocios.ViewModels;
 using EvolAppSocios.Views;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 public static class MauiProgram
 {
@@ -58,18 +60,41 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
             });
 
-        AppDomain.CurrentDomain.FirstChanceException += (sender, e) =>
-         {
-#if DEBUG
-            System.Diagnostics.Debug.WriteLine("=== EXCEPTION ===");
-            System.Diagnostics.Debug.WriteLine(e.Exception.Message.ToString()); // incluye stack trace con el assembly culpable
-            System.Diagnostics.Debug.WriteLine("=======================================");
-#endif
+        //        AppDomain.CurrentDomain.FirstChanceException += (sender, e) =>
+        //         {
+        //#if DEBUG
+        //            System.Diagnostics.Debug.WriteLine("=== EXCEPTION ===");
+        //            System.Diagnostics.Debug.WriteLine(e.Exception.Message.ToString()); // incluye stack trace con el assembly culpable
+        //            System.Diagnostics.Debug.WriteLine("=======================================");
+        //#endif
+        //        };
+        AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+        {
+            var ex = (Exception)e.ExceptionObject;
+            Debug.WriteLine("[UNHANDLED] " + ex);
+            // acá podés loguear a disco/servidor
         };
+
+        TaskScheduler.UnobservedTaskException += (s, e) =>
+        {
+            Debug.WriteLine("[UNOBSERVED] " + e.Exception);
+            e.SetObserved(); // evita que mate el proceso por tareas no observadas
+        };
+
+#if ANDROID
+        Android.Runtime.AndroidEnvironment.UnhandledExceptionRaiser += (s, e) =>
+        {
+            Debug.WriteLine("[ANDROID] " + e.Exception);
+            // ¡Cuidado! marcar como manejada puede dejar la app en estado raro.
+            // e.Handled = true; // úsalo sólo si sabés lo que hacés
+        };
+#endif
 
         var app = builder.Build();
         // Guardar el ServiceProvider para el helper
-        EvolAppSocios.Utils.ServiceHelper.Services = app.Services;
+        // Si usás ServiceHelper:
+        EvolAppSocios.Utils.ServiceHelper.ConfigureServices(app.Services);
+
         return app;
     }
 }

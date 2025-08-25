@@ -13,6 +13,6 @@
         <Label Text="{Binding Afiliado.FechaNacimiento}" />
         <Label Text="{Binding Afiliado.Correo}" />
 
-        <Button Text="Consultar si puede votar" Command="{Binding IrAlPadronCommand}" />
+        <Button Text="Votar" Command="{Binding IrAlPadronCommand}" />
     </VerticalStackLayout>
 </ContentPage>

@@ -25,8 +25,8 @@ public partial class RegistrarCuentaViewModel : ObservableObject
     public async Task BuscarAfiliado()
     {
         var dto = await _afiliadoApi.ObtenerAfiliado(Documento);
-        afiliado = dto is not null ? _mapper.Map<Afiliado>(dto) : null;
-        afiliadoEncontrado = afiliado is not null;
+        Afiliado = dto is not null ? _mapper.Map<Afiliado>(dto) : null;
+        AfiliadoEncontrado = Afiliado is not null;
 
         if (AfiliadoEncontrado)
         {

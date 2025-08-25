@@ -9,11 +9,11 @@ namespace EvolApp.Shared.Models
 {
     public class Afiliado
     {
-        public string Documento { get; set; }
-        public string Nombre { get; set; }
-        public string Apellido { get; set; }
-        public string FechaNacimiento { get; set; }
-        public string Correo { get; set; }
+        public string Documento { get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
+        public string Apellido { get; set; } = string.Empty;
+        public string FechaNacimiento { get; set; } = string.Empty;
+        public string Correo { get; set; } = string.Empty;
 
         public string CorreoOculto =>
             Regex.Replace(Correo, @"(?<=.).(?=.*@)", "*")

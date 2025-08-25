@@ -2,8 +2,10 @@
 
 public class ListaElectoral
 {
-    public string Id { get; set; }
-    public string Nombre { get; set; }         // Ej: "Frente de Todos"
-    public string EleccionId { get; set; }     // FK a Eleccion.Id
+    public string Id { get; set; } = string.Empty;
+    public string Nombre { get; set; } = string.Empty;
+    public string EleccionId { get; set; } = string.Empty;
+
+    public string Descripcion { get; set; } = string.Empty;
     public List<Candidato> Candidatos { get; set; } = new();
 }

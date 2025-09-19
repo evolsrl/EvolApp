@@ -9,24 +9,21 @@ namespace EvolApp.API.Repositories
     {
         private readonly IDbConnection _db;
         public AfiliadoRepository(IDbConnection db) => _db = db;
-
-        public async Task<AfiliadoDto?> GetByDocumentoAsync(string documento)
+        public async Task<AfiliadoDto?> ObtenerPorDocumento(string documentoOCuit)
         {
             return await _db.QuerySingleOrDefaultAsync<AfiliadoDto>(
                 "EvolAppApiAfiliadosSeleccionarPorDNI",
-                new { Documento = documento },
+                new { DocumentoOCuit = documentoOCuit },
                 commandType: CommandType.StoredProcedure);
         }
-
-        public async Task SendCodeAsync(string documento)
+        public async Task EnviarCodigo(string documento)
         {
             await _db.ExecuteAsync(
                 "EvolAppApiAfiliadosEnviarCodigoVerificacion",
                 new { Documento = documento },
                 commandType: CommandType.StoredProcedure);
         }
-
-        public async Task<ResultadoDTO> VerifyCodeAsync(string documento, string codigo)
+        public async Task<ResultadoDTO> VerificarCodigo(string documento, string codigo)
         {
             var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
                 "EvolAppApiAfiliadosVerificarCodigo",

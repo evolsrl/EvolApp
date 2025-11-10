@@ -36,89 +36,99 @@ public class AfiliadosController : ControllerBase
         var ok = await _repo.VerificarCodigo(dni, c.GetString()!);
         return Ok(ok);
     }
-    //// POST /api/afiliados/alta
-    //[Authorize]
-    //[HttpPost("alta")]
-    //public async Task<ActionResult> AltaAfiliado([FromBody] JsonElement body)
-    //{
-    //    if (!body.TryGetProperty("IdPrestamoSimulacion", out var idPrestamoSimulacion)) return BadRequest("Falta IdPrestamoSimulacion.");
-    //    if (!body.TryGetProperty("IP", out var ip)) return BadRequest("Falta IP.");
-    //    if (!body.TryGetProperty("ApellidoNombre", out var apellidoNombre)) return BadRequest("Falta ApellidoNombre.");
-    //    if (!body.TryGetProperty("CorreoElectronico", out var correoElectronico)) return BadRequest("Falta CorreoElectronico.");
-    //    if (!body.TryGetProperty("Celular", out var celular)) return BadRequest("Falta Celular.");
-    //    if (!body.TryGetProperty("RangoHorario", out var rangoHorario)) return BadRequest("Falta RangoHorario.");
-    //    if (!body.TryGetProperty("Observacion", out var observacion)) return BadRequest("Falta Observacion.");
+    // POST /api/afiliados/auth/registrar
+    [HttpPost("auth/registrar")]
+    public async Task<ActionResult<ResultadoDTO>> RegistrarAfiliado([FromBody] JsonElement body)
+    {
+        try
+        {
+            if (!body.TryGetProperty("documento", out var documentoProp) ||
+                !body.TryGetProperty("username", out var usernameProp) ||
+                !body.TryGetProperty("password", out var passwordProp))
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "Faltan datos obligatorios (documento, username o password)."
+                });
+            }
 
-    //    var dbparams = new DynamicParameters();
+            var documento = documentoProp.GetString();
+            var username = usernameProp.GetString();
+            var password = passwordProp.GetString();
 
-    //    dbparams.Add("IdPrestamoSimulacion", idPrestamoSimulacion.GetString(), DbType.String);
-    //    dbparams.Add("IP", ip.GetString(), DbType.String);
-    //    dbparams.Add("ApellidoNombre", apellidoNombre.GetString(), DbType.String);
-    //    dbparams.Add("CorreoElectronico", correoElectronico.GetString(), DbType.String);
-    //    dbparams.Add("Celular", celular.GetString(), DbType.String);
-    //    dbparams.Add("RangoHorario", rangoHorario.GetString(), DbType.String);
-    //    dbparams.Add("Observacion", observacion.GetString(), DbType.String);
+            // Validaciones adicionales
+            if (string.IsNullOrEmpty(documento) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "El documento, username y password son obligatorios."
+                });
+            }
 
-    //    var result = await Task.FromResult(_dapper.Update<Prestamo>("[WordPressPrestamosSimulacionesActualizar]", dbparams, commandType: CommandType.StoredProcedure));
+            if (username.Length < 4)
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "El usuario debe tener al menos 4 caracteres."
+                });
+            }
 
-    //    if (result != null)
-    //    {
-    //        return Ok(result);
-    //    }
-    //    return BadRequest("Hubo un error al actualizar el préstamo.");
-    //}
+            if (password.Length < 6)
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "La contraseña debe tener al menos 6 caracteres."
+                });
+            }
 
-    //[Authorize]
-    //[HttpPost("altaafiliado/")]
-    //public async Task<ActionResult> AltaAfiliado([FromBody] JsonElement data)
-    //{
-    //    var dbparams = new DynamicParameters();
-    //    dbparams.Add("Nombre", data.Nombre, DbType.String);
-    //    dbparams.Add("Apellido", data.Apellido, DbType.String);
-    //    dbparams.Add("TipoDocumento", data.IdTipoDocumento, DbType.String);
-    //    dbparams.Add("NumeroDocumento", data.NumeroDocumento, DbType.String);
-    //    dbparams.Add("NumeroSocio", data.NumeroSocio, DbType.String);
-    //    dbparams.Add("NumeroLegajo", data.MatriculaIAF, DbType.String);
-    //    dbparams.Add("Sexo", data.DescripcionSexo, DbType.String);
-    //    dbparams.Add("FechaNacimiento", data.FechaNacimiento, DbType.String);
-    //    dbparams.Add("FechaIngreso", data.FechaIngreso, DbType.String);
-    //    dbparams.Add("EstadoCivil", data.DescripcionEstadoCivil, DbType.String);
-    //    dbparams.Add("Categoria", data.DescripcionCategoria, DbType.String);
-    //    dbparams.Add("Estado", data.IdEstado, DbType.String);
-    //    dbparams.Add("Filial", data.IdFilial, DbType.String);
-    //    dbparams.Add("CUIL", data.CUIL, DbType.String);
-    //    dbparams.Add("CorreoElectronico", data.CorreoElectronico, DbType.String);
-    //    dbparams.Add("Calle", data.Calle, DbType.String);
-    //    dbparams.Add("Numero", data.Numero, DbType.String);
-    //    dbparams.Add("Piso", data.Piso, DbType.String);
-    //    dbparams.Add("Departamento", data.Departamento, DbType.String);
-    //    dbparams.Add("CodigoPostal", data.CodigoPostal, DbType.String);
-    //    dbparams.Add("Provincia", data.DescripcionProvincia, DbType.String);
-    //    dbparams.Add("FormaCobro", data.IdFormaCobro, DbType.String);
-    //    dbparams.Add("Dependencia", data.CodigoZonaGrupo, DbType.String);
-    //    dbparams.Add("NumeroCelular", data.Celular, DbType.String);
+            var resultado = await _repo.RegistrarAfiliado(documento, username, password);
 
-    //    // Ejecutar el procedimiento almacenado y obtener el resultado (ID del afiliado o error)
-    //    var result = await Task.FromResult(_dapper.Get<object>("[ApiAfiBeneficiosAltaAfiliado]", dbparams, commandType: CommandType.StoredProcedure));
+            if (resultado == null)
+            {
+                return Ok(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "Error interno del servidor"
+                });
+            }
 
-    //    if (result is int idAfiliado && idAfiliado > 0)
-    //    {
-    //        // Si el resultado es un ID válido (mayor que 0), se devuelve el ID del afiliado
-    //        return Ok(new { Success = true, IdAfiliado = idAfiliado });
-    //    }
-    //    else if (result is string errorMessage)
-    //    {
-    //        // Si el resultado es un mensaje de error (asumido como string), se devuelve ese mensaje
-    //        return BadRequest(new { Success = false, ErrorMessage = errorMessage });
-    //    }
-    //    else
-    //    {
-    //        // Si no se recibe ni un ID ni un mensaje de error esperado, se devuelve un error genérico
-    //        return BadRequest(new { Success = false, ErrorMessage = "Ocurrió un error desconocido." });
-    //    }
-    //}
+            return Ok(resultado);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ResultadoDTO
+            {
+                Exito = Convert.ToBoolean(0),
+                Mensaje = "Error interno del servidor"
+            });
+        }
+    }
+    // POST /api/afiliados/auth/login
+    [HttpPost("auth/login")]
+    public async Task<ActionResult<AfiliadoDto>> LoguearAfiliado([FromBody] JsonElement body)
+    {
+        if (!body.TryGetProperty("identificador", out var userProp) ||
+            !body.TryGetProperty("password", out var passwordProp))
+        {
+            return BadRequest("Faltan datos obligatorios (identificador o password).");
+        }
 
+        var documento = userProp.GetString();
+        var password = passwordProp.GetString();
 
+        var resultado = await _repo.LoguearAfiliado(documento!, password!);
 
-
+        return Ok(resultado);
+    }
+    // GET /api/afiliados/formas-cobros-afiliados/{id}
+    [HttpGet("formas-cobros-afiliados/{documentoOCuit}")]
+    public async Task<ActionResult<IEnumerable<FormaCobroDto>>> ObtenerFormasCobrosPorDocumento(string documentoOCuit)
+    {
+        var formas = await _repo.ObtenerFormasCobrosPorDocumento(documentoOCuit);
+        return Ok(formas ?? Enumerable.Empty<FormaCobroDto>());
+    }
 }

@@ -31,6 +31,41 @@ namespace EvolApp.API.Repositories
                 commandType: CommandType.StoredProcedure);
             return result;
         }
+        public async Task<ResultadoDTO?> RegistrarAfiliado(string documento, string username, string password)
+        {
+            try
+            {
+                var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                    "EvolAppApiAfiliadosRegistrarAfiliado",
+                    new { Documento = documento, Username = username, Password = password },
+                    commandType: CommandType.StoredProcedure);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "Error al procesar el registro"
+                };
+            }
+        }
+        public async Task<AfiliadoDto?> LoguearAfiliado(string documento, string password)
+        {
+            var result = await _db.QuerySingleOrDefaultAsync<AfiliadoDto>(
+                "EvolAppApiAfiliadosLoguearAfiliado",
+                new { Documento = documento, Password = password },
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
+        public async Task<IEnumerable<FormaCobroDto>> ObtenerFormasCobrosPorDocumento(string documentoOCuit)
+        {
+            return await _db.QueryAsync<FormaCobroDto>(
+                "EvolAppApiAfiliadosSeleccionarFormaCobroPorDNI",
+                new { DocumentoOCuit = documentoOCuit },
+                commandType: CommandType.StoredProcedure);
+        }
 
         public async Task<ResultadoDTO> ExisteEvolSocios(string sociosJson)
         {

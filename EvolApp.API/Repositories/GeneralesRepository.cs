@@ -1,0 +1,19 @@
+﻿using Dapper;
+using EvolApp.API.Repositories.Interfaces;
+using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
+using System.Data;
+
+namespace EvolApp.API.Repositories;
+public class GeneralesRepository : IGeneralesRepository
+{
+    private readonly IDbConnection _db;
+    public GeneralesRepository(IDbConnection db) => _db = db;
+
+    public async Task<IEnumerable<FormaCobroDto>> GetAllAsync()
+    {
+        return await _db.QueryAsync<FormaCobroDto>(
+            "EvolAppApiEleccionesSeleccionar",
+            commandType: CommandType.StoredProcedure);
+    }
+}

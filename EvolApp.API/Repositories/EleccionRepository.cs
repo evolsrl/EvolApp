@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
 using System.Data;
 
 namespace EvolApp.API.Repositories;
@@ -30,5 +31,23 @@ public class EleccionRepository : IEleccionRepository
             "EvolAppApiListasEleccionesPostulantesSeleccionarPorLista",
             new { ListaId = listaId },
             commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task<ResultadoDTO> GetValidarVotoAsync(string listaId, string documento)
+    {
+        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+        "EvolAppApiEleccionesValidarVoto",
+        new { ListaId = listaId, Documento = documento },
+        commandType: CommandType.StoredProcedure);
+        return result;
+    }
+    
+    public async Task<ResultadoDTO> GetVotarAsync(string listaId, string documento)
+    {
+        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+        "EvolAppApiEleccionesVotar",
+        new { ListaId = listaId, Documento = documento },
+        commandType: CommandType.StoredProcedure);
+        return result;
     }
 }

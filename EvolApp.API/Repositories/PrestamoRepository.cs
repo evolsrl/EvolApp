@@ -86,4 +86,11 @@ public class PrestamoRepository : IPrestamoRepository
             commandType: CommandType.StoredProcedure);
         return result;
     }
+    public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro)
+    {
+        return await _db.QueryAsync<PrestamosPlanesDto>(
+            "EvolAppApiPlanesPrestamosSeleccionarPorFormaCobro",
+            new { IdFormaCobro = formaCobro },
+            commandType: CommandType.StoredProcedure);
+    }
 }

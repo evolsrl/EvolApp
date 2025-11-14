@@ -1,6 +1,7 @@
 ﻿using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace EvolApp.API.Controllers;
 
@@ -46,6 +47,13 @@ public class PrestamosController : ControllerBase
         if (data is null) return NotFound();
 
         return Ok(data);
+    }
+    // GET /api/prestamosDetalles/documento/{documentoOCuit}
+    [HttpGet("prestamosDetalles/planes/{formaCobro}")]
+    public async Task<ActionResult<IEnumerable<PrestamosPlanesDto>>> ObtenerPlanesPorFormaCobro(string formaCobro)
+    {
+        var planes = await _repo.ObtenerPlanesPorFormaCobro(formaCobro);
+        return Ok(planes ?? Enumerable.Empty<PrestamosPlanesDto>());
     }
 
     [Authorize]

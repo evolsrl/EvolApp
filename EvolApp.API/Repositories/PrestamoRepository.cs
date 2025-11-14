@@ -70,4 +70,20 @@ public class PrestamoRepository : IPrestamoRepository
 
         return cabecera with { Cuponera = cuotas };
     }
+    public async Task<ResultadoDTO> AltaEvolPrestamos(string json)
+    {
+        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+            "EVOLApiPrePrestamosInsertar",
+            new { Json = json },
+            commandType: CommandType.StoredProcedure);
+        return result;
+    }
+    public async Task<ResultadoDTO> ConsultaEvolPrestamos(string json)
+    {
+        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+            "EVOLApiPrePrestamosConsultar",
+            new { Json = json },
+            commandType: CommandType.StoredProcedure);
+        return result;
+    }
 }

@@ -36,6 +36,39 @@ public class AfiliadosController : ControllerBase
         var ok = await _repo.VerificarCodigo(dni, c.GetString()!);
         return Ok(ok);
     }
+
+    [Authorize]
+    [HttpPost("ExisteEvolSocios")]
+    public async Task<IActionResult> ExisteEvolSocios([FromBody] JsonElement json)
+    {
+        var res = await _repo.ExisteEvolSocios(json.GetRawText());
+        return Ok(res); 
+    }
+
+    [Authorize]
+    [HttpPost("AltaEvolSocios")]
+    public async Task<IActionResult> AltaEvolSocios([FromBody] JsonElement json)
+    {
+        var res = await _repo.AltaEvolSocios(json.GetRawText());
+        return Ok(res);
+    }
+
+    [Authorize]
+    [HttpPost("ConsultaEvolSocios")]
+    public async Task<IActionResult> ConsultaEvolSocios([FromBody] JsonElement json)
+    {
+        var res = await _repo.ConsultaEvolSocios(json.GetRawText());
+        return Ok(res);
+    }
+
+    [Authorize]
+    [HttpPost("ActualizarEvolSocios")]
+    public async Task<IActionResult> ActualizarEvolSocios([FromBody] JsonElement  json)
+    {
+        var res = await _repo.ActualizarEvolSocios(json.GetRawText());
+        return Ok(res);
+    }
+    
     //// POST /api/afiliados/alta
     //[Authorize]
     //[HttpPost("alta")]

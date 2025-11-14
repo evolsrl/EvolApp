@@ -9,4 +9,6 @@ public interface IPrestamoRepository
     Task<IEnumerable<PrestamoDto>> ObtenerPorDocumento(string documentoOCuit);
     Task<PrestamoDetalleDto?> ObtenerPrestamoPorId(string idPrestamo);
     Task<PrestamoDetalleDto?> ObtenerPrestamoPorDocumento(string documentoOCuit);
+    Task<ResultadoDTO> AltaEvolPrestamos(string json);
+    Task<ResultadoDTO> ConsultaEvolPrestamos(string json);
 }

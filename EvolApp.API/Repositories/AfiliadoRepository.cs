@@ -31,5 +31,41 @@ namespace EvolApp.API.Repositories
                 commandType: CommandType.StoredProcedure);
             return result;
         }
+
+        public async Task<ResultadoDTO> ExisteEvolSocios(string sociosJson)
+        {
+            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                 "EVOLApiAfiAfiliadosExisteSocio",
+                 new { SociosJson = sociosJson},
+                 commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<AltaAfiliadoResultadoDTO> AltaEvolSocios(string sociosJson)
+        {
+            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                 "EVOLApiAfiAfiliadosInsertar",
+                 new { SociosJson = sociosJson },
+                 commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<ConsultaAfiliadosResultadoDTO> ConsultaEvolSocios(string sociosJson)
+        {
+            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                "EVOLApiAfiAfiliadosConsultar",
+                new { SociosJson = sociosJson },
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public async Task<ResultadoDTO> ActualizarEvolSocios(string sociosJson)
+        {
+            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                "EVOLApiAfiAfiliadosActualizar",
+                new { SociosJson = sociosJson },
+                commandType: CommandType.StoredProcedure);
+            return result;
+        }
     }
 }

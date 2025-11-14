@@ -47,4 +47,19 @@ public class PrestamosController : ControllerBase
 
         return Ok(data);
     }
+
+    [Authorize]
+    [HttpPost("AltaEvolPrestamos")]
+    public async Task<IActionResult> AltaEvolPrestamos(Json json)
+    {
+        var res = await _repo.AltaEvolPrestamos(json.GetRawText());
+        return Ok(res);
+    }
+    [Authorize]
+    [HttpPost("ConsultaEvolPrestamos")]
+    public async Task<IActionResult> ConsultaEvolPrestamos(Json json)
+    {
+        var res = await _repo.ConsultaEvolPrestamos(json.GetRawText());
+        return Ok(res);
+    }
 }

@@ -1,7 +1,9 @@
 ﻿using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace EvolApp.API.Controllers;
 
@@ -58,14 +60,14 @@ public class PrestamosController : ControllerBase
 
     [Authorize]
     [HttpPost("AltaEvolPrestamos")]
-    public async Task<IActionResult> AltaEvolPrestamos(Json json)
+    public async Task<IActionResult> AltaEvolPrestamos([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolPrestamos(json.GetRawText());
         return Ok(res);
     }
     [Authorize]
     [HttpPost("ConsultaEvolPrestamos")]
-    public async Task<IActionResult> ConsultaEvolPrestamos(Json json)
+    public async Task<IActionResult> ConsultaEvolPrestamos([FromBody] JsonElement json)
     {
         var res = await _repo.ConsultaEvolPrestamos(json.GetRawText());
         return Ok(res);

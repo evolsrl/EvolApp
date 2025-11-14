@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
 using System.Data;
 
 namespace EvolApp.API.Repositories.Interfaces;

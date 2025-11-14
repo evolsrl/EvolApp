@@ -2,6 +2,7 @@
 using Dapper;
 using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
+using EvolAppSocios.Models;
 
 namespace EvolApp.API.Repositories;
 

@@ -76,7 +76,7 @@ namespace EvolApp.API.Repositories
             return result;
         }
 
-        public async Task<AltaAfiliadoResultadoDTO> AltaEvolSocios(string sociosJson)
+        public async Task<ResultadoDTO> AltaEvolSocios(string sociosJson)
         {
             var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
                  "EVOLApiAfiAfiliadosInsertar",
@@ -85,7 +85,7 @@ namespace EvolApp.API.Repositories
             return result;
         }
 
-        public async Task<ConsultaAfiliadosResultadoDTO> ConsultaEvolSocios(string sociosJson)
+        public async Task<ResultadoDTO> ConsultaEvolSocios(string sociosJson)
         {
             var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
                 "EVOLApiAfiAfiliadosConsultar",

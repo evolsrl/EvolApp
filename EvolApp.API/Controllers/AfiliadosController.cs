@@ -131,10 +131,10 @@ public class AfiliadosController : ControllerBase
         var formas = await _repo.ObtenerFormasCobrosPorDocumento(documentoOCuit);
         return Ok(formas ?? Enumerable.Empty<FormaCobroDto>());
     }
-    [HttpPost("ExisteEvolSocios")]
-    public async Task<IActionResult> ExisteEvolSocios([FromBody] JsonElement json)
+    [HttpGet("ExisteEvolSocios/{cuit}")]
+    public async Task<IActionResult> ExisteEvolSocios(string cuit)
     {
-        var res = await _repo.ExisteEvolSocios(json.GetRawText());
+        var res = await _repo.ExisteEvolSocios(cuit);
         return Ok(res);
     }
     [HttpPost("AltaEvolSocios")]
@@ -143,10 +143,10 @@ public class AfiliadosController : ControllerBase
         var res = await _repo.AltaEvolSocios(json.GetRawText());
         return Ok(res);
     }
-    [HttpPost("ConsultaEvolSocios")]
-    public async Task<IActionResult> ConsultaEvolSocios([FromBody] JsonElement json)
+    [HttpGet("ConsultaEvolSocios/{cuit}")]
+    public async Task<IActionResult> ConsultaEvolSocios(string cuit)
     {
-        var res = await _repo.ConsultaEvolSocios(json.GetRawText());
+        var res = await _repo.ConsultaEvolSocios(cuit);
         return Ok(res);
     }
     [HttpPost("ActualizarEvolSocios")]

@@ -66,10 +66,10 @@ public class PrestamosController : ControllerBase
         return Ok(res);
     }
     [Authorize]
-    [HttpPost("ConsultaEvolPrestamos")]
-    public async Task<IActionResult> ConsultaEvolPrestamos([FromBody] JsonElement json)
+    [HttpGet("ConsultaEvolPrestamos/{cuit}")]
+    public async Task<IActionResult> ConsultaEvolPrestamos(string cuit)
     {
-        var res = await _repo.ConsultaEvolPrestamos(json.GetRawText());
+        var res = await _repo.ConsultaEvolPrestamos(cuit);
         return Ok(res);
     }
 }

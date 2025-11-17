@@ -71,19 +71,19 @@ public class PrestamoRepository : IPrestamoRepository
 
         return cabecera with { Cuponera = cuotas };
     }
-    public async Task<ResultadoDTO> AltaEvolPrestamos(string json)
+    public async Task<dynamic> AltaEvolPrestamos(string json)
     {
-        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+        var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
             "EVOLApiPrePrestamosInsertar",
             new { Json = json },
             commandType: CommandType.StoredProcedure);
         return result;
     }
-    public async Task<ResultadoDTO> ConsultaEvolPrestamos(string json)
+    public async Task<dynamic> ConsultaEvolPrestamos(string cuit)
     {
-        var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+        var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
             "EVOLApiPrePrestamosConsultar",
-            new { Json = json },
+            new { cuit },
             commandType: CommandType.StoredProcedure);
         return result;
     }

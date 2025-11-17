@@ -11,10 +11,10 @@ namespace EvolApp.API.Repositories.Interfaces
         Task<ResultadoDTO> RegistrarAfiliado(string documento, string username, string password);
         Task<AfiliadoDto?> LoguearAfiliado(string documento, string password);
         Task<IEnumerable<FormaCobroDto>> ObtenerFormasCobrosPorDocumento(string documentoOCuit);
-        Task<ResultadoDTO> AltaEvolSocios(string json);
+        Task<dynamic> AltaEvolSocios(string json);
         Task<ResultadoDTO> ActualizarEvolSocios(string json);
-        Task<ResultadoDTO> ExisteEvolSocios(string json);
-        Task<ResultadoDTO> ConsultaEvolSocios(string json);
+        Task<ResultadoDTO> ExisteEvolSocios(string cuit);
+        Task<dynamic> ConsultaEvolSocios(string cuit);
         //Task<AfiliadoDto?> AltaSocio(string documentoOCuit);
     }
 }

@@ -67,29 +67,29 @@ namespace EvolApp.API.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<ResultadoDTO> ExisteEvolSocios(string sociosJson)
+        public async Task<ResultadoDTO> ExisteEvolSocios(string cuit)
         {
             var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
                  "EVOLApiAfiAfiliadosExisteSocio",
-                 new { SociosJson = sociosJson},
+                 new { cuit },
                  commandType: CommandType.StoredProcedure);
             return result;
         }
 
-        public async Task<ResultadoDTO> AltaEvolSocios(string sociosJson)
+        public async Task<dynamic> AltaEvolSocios(string sociosJson)
         {
-            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+            var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
                  "EVOLApiAfiAfiliadosInsertar",
                  new { SociosJson = sociosJson },
                  commandType: CommandType.StoredProcedure);
             return result;
         }
 
-        public async Task<ResultadoDTO> ConsultaEvolSocios(string sociosJson)
+        public async Task<dynamic> ConsultaEvolSocios(string cuit)
         {
-            var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+            var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
                 "EVOLApiAfiAfiliadosConsultar",
-                new { SociosJson = sociosJson },
+                new { cuit },
                 commandType: CommandType.StoredProcedure);
             return result;
         }

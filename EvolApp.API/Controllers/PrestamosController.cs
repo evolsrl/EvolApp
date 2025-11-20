@@ -18,6 +18,7 @@ public class PrestamosController : ControllerBase
     }
     // GET /api/prestamos/documento/{documentoOCuit}
     [HttpGet("prestamos/documento/{documentoOCuit}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<IEnumerable<PrestamoDto>>> ObtenerPorDocumento([FromRoute] string documentoOCuit)
     {
         if (string.IsNullOrWhiteSpace(documentoOCuit))
@@ -28,6 +29,7 @@ public class PrestamosController : ControllerBase
     }
     // GET /api/prestamosDetalles/id/{id}
     [HttpGet("prestamosDetalles/id/{id}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<PrestamoDetalleDto>> ObtenerPrestamoPorId([FromRoute] string id)
     {
         if (string.IsNullOrWhiteSpace(id))
@@ -40,6 +42,7 @@ public class PrestamosController : ControllerBase
     }
     // GET /api/prestamosDetalles/documento/{documentoOCuit}
     [HttpGet("prestamosDetalles/documento/{documentoOCuit}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<PrestamoDetalleDto>> ObtenerPrestamoPorDocumento([FromRoute] string documentoOCuit)
     {
         if (string.IsNullOrWhiteSpace(documentoOCuit))
@@ -52,20 +55,21 @@ public class PrestamosController : ControllerBase
     }
     // GET /api/prestamosDetalles/documento/{documentoOCuit}
     [HttpGet("prestamosDetalles/planes/{formaCobro}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<IEnumerable<PrestamosPlanesDto>>> ObtenerPlanesPorFormaCobro(string formaCobro)
     {
         var planes = await _repo.ObtenerPlanesPorFormaCobro(formaCobro);
         return Ok(planes ?? Enumerable.Empty<PrestamosPlanesDto>());
     }
 
-    [HttpPost("prestamos/AltaEvolPrestamos")]
-    public async Task<IActionResult> AltaEvolPrestamos([FromBody] JsonElement json)
+    [HttpPost("prestamos/agregar")]
+    public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolPrestamos(json.GetRawText());
         return Ok(res);
     }
-    [HttpGet("prestamos/ConsultaEvolPrestamos/{cuit}")]
-    public async Task<IActionResult> ConsultaEvolPrestamos(string cuit)
+    [HttpGet("prestamos/consultar/{cuit}")]
+    public async Task<IActionResult> Consultar(string cuit)
     {
         var prestamos = await _repo.ConsultaEvolPrestamos(cuit);
 

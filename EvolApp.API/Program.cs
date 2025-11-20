@@ -1,10 +1,10 @@
-﻿using System.Data;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-
-using EvolApp.API.Data;
+﻿using EvolApp.API.Data;
 using EvolApp.API.Repositories;
 using EvolApp.API.Repositories.Interfaces;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,7 +39,42 @@ builder.Services.AddScoped<IGeneralesRepository, GeneralesRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// 🔐 SWAGGER + API-KEY
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "EvolApp API",
+        Version = "v1"
+    });
+
+    // Definición del esquema de seguridad por API-KEY
+    c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
+    {
+        Description = "Ingrese la API Key en el header. Ejemplo: X-API-KEY: {tu-clave}",
+        Name = "X-API-KEY",                // 👈 CAMBIÁ esto si tu header se llama distinto
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "ApiKeyScheme"
+    });
+
+    // Requerir API-KEY en todos los endpoints
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"          // 👈 mismo ID que arriba
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -48,6 +83,7 @@ app.UseSwaggerUI();
 
 app.UseCors("AllowAll");
 
+// 🔐 Middleware de API-KEY
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseAuthorization();

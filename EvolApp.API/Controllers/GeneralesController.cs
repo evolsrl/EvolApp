@@ -7,6 +7,7 @@ using System.Text.Json;
 
 [ApiController]
 [Route("api/generales")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class GeneralesController : ControllerBase
 {
     private readonly IGeneralesRepository _repo;

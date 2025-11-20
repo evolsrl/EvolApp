@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/menu")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class MenuController : ControllerBase
 {
     private readonly IMenuRepository _repo;

@@ -7,6 +7,7 @@ using System.Text.Json;
 
 [ApiController]
 [Route("api/elecciones")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class EleccionesController : ControllerBase
 {
     private readonly IEleccionRepository _repo;

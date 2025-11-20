@@ -131,8 +131,8 @@ public class AfiliadosController : ControllerBase
         var formas = await _repo.ObtenerFormasCobrosPorDocumento(documentoOCuit);
         return Ok(formas ?? Enumerable.Empty<FormaCobroDto>());
     }
-    [HttpGet("ExisteEvolSocios/{cuit}")]
-    public async Task<IActionResult> ExisteEvolSocios(string cuit)
+    [HttpGet("existe/{cuit}")]
+    public async Task<IActionResult> Existe(string cuit)
     {
         var res = await _repo.ExisteEvolSocios(cuit);
 
@@ -141,14 +141,14 @@ public class AfiliadosController : ControllerBase
 
         return Ok(res);
     }
-    [HttpPost("AltaEvolSocios")]
-    public async Task<IActionResult> AltaEvolSocios([FromBody] JsonElement json)
+    [HttpPost("agregar")]
+    public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolSocios(json.GetRawText());
         return Ok(res);
     }
-    [HttpGet("ConsultaEvolSocios/{cuit}")]
-    public async Task<IActionResult> ConsultaEvolSocios(string cuit)
+    [HttpGet("consultar/{cuit}")]
+    public async Task<IActionResult> Consultar(string cuit)
     {
         var res = await _repo.ConsultaEvolSocios(cuit);
 
@@ -157,8 +157,8 @@ public class AfiliadosController : ControllerBase
 
         return Ok(res);
     }
-    [HttpPost("ActualizarEvolSocios")]
-    public async Task<IActionResult> ActualizarEvolSocios([FromBody] JsonElement json)
+    [HttpPost("actualizar")]
+    public async Task<IActionResult> Actualizar([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());
 

@@ -2,6 +2,7 @@
 using EvolApp.Shared.DTOs;
 using EvolAppSocios.Models;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace EvolApp.API.Repositories.Interfaces;
 
@@ -12,5 +13,5 @@ public interface IPrestamoRepository
     Task<PrestamoDetalleDto?> ObtenerPrestamoPorDocumento(string documentoOCuit);
     Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro);
     Task<dynamic> AltaEvolPrestamos(string json);
-    Task<dynamic> ConsultaEvolPrestamos(string cuit);
+    Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string cuit);
 }

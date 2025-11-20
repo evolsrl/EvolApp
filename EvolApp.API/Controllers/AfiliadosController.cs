@@ -135,6 +135,10 @@ public class AfiliadosController : ControllerBase
     public async Task<IActionResult> ExisteEvolSocios(string cuit)
     {
         var res = await _repo.ExisteEvolSocios(cuit);
+
+        if (res == null)
+            return NotFound(new { exito = false, mensaje = "Socio no encontrado." });
+
         return Ok(res);
     }
     [HttpPost("AltaEvolSocios")]
@@ -147,12 +151,20 @@ public class AfiliadosController : ControllerBase
     public async Task<IActionResult> ConsultaEvolSocios(string cuit)
     {
         var res = await _repo.ConsultaEvolSocios(cuit);
+
+        if (res == null)
+            return NotFound(new { exito = false, mensaje = "Socio no encontrado." });
+
         return Ok(res);
     }
     [HttpPost("ActualizarEvolSocios")]
     public async Task<IActionResult> ActualizarEvolSocios([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());
+
+        if (res == null)
+            return NotFound(new { exito = false, mensaje = "Socio no encontrado." });
+
         return Ok(res);
     }
 

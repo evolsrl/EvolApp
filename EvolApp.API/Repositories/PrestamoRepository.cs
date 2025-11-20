@@ -1,8 +1,10 @@
-﻿using System.Data;
-using Dapper;
+﻿using Dapper;
 using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
 using EvolAppSocios.Models;
+using System.Data;
+using System.Dynamic;
+using System.Text.Json;
 
 namespace EvolApp.API.Repositories;
 
@@ -71,6 +73,13 @@ public class PrestamoRepository : IPrestamoRepository
 
         return cabecera with { Cuponera = cuotas };
     }
+    public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro)
+    {
+        return await _db.QueryAsync<PrestamosPlanesDto>(
+            "EvolAppApiPlanesPrestamosSeleccionarPorFormaCobro",
+            new { IdFormaCobro = formaCobro },
+            commandType: CommandType.StoredProcedure);
+    }
     public async Task<dynamic> AltaEvolPrestamos(string json)
     {
         var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
@@ -79,19 +88,57 @@ public class PrestamoRepository : IPrestamoRepository
             commandType: CommandType.StoredProcedure);
         return result;
     }
-    public async Task<dynamic> ConsultaEvolPrestamos(string cuit)
+    public async Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string cuit)
     {
-        var result = await _db.QuerySingleOrDefaultAsync<dynamic>(
+        var rows = await _db.QueryAsync<dynamic>(
             "EVOLApiPrePrestamosConsultar",
-            new { cuit },
+            new { Cuil = cuit },
             commandType: CommandType.StoredProcedure);
-        return result;
-    }
-    public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro)
-    {
-        return await _db.QueryAsync<PrestamosPlanesDto>(
-            "EvolAppApiPlanesPrestamosSeleccionarPorFormaCobro",
-            new { IdFormaCobro = formaCobro },
-            commandType: CommandType.StoredProcedure);
+
+        var lista = new List<dynamic>();
+
+        var jsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        foreach (var row in rows)
+        {
+            var dicOrigen = (IDictionary<string, object>)row;
+
+            dynamic item = new ExpandoObject();
+            var dicDestino = (IDictionary<string, object>)item;
+
+            // Copio todas las columnas tal cual
+            foreach (var kv in dicOrigen)
+            {
+                // Manejar DBNull para que no explote el JSON
+                dicDestino[kv.Key] = kv.Value is DBNull ? null : kv.Value;
+            }
+
+            // Parseo JSON de Cuotas (que viene como NVARCHAR(MAX) del SP)
+            if (dicOrigen.TryGetValue("Cuotas", out var cuotasObj)
+                && cuotasObj is string cuotasStr
+                && !string.IsNullOrWhiteSpace(cuotasStr))
+            {
+                try
+                {
+                    var cuotas = JsonSerializer.Deserialize<List<ExpandoObject>>(cuotasStr, jsonOptions);
+
+                    // Si deserializa bien, reemplazo la propiedad
+                    if (cuotas != null)
+                        dicDestino["Cuotas"] = cuotas;
+                }
+                catch
+                {
+                    // Si por alguna razón falla el parseo, dejo el string original
+                    // para no romper el endpoint.
+                }
+            }
+
+            lista.Add(item);
+        }
+
+        return lista;
     }
 }

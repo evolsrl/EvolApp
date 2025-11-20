@@ -58,18 +58,20 @@ public class PrestamosController : ControllerBase
         return Ok(planes ?? Enumerable.Empty<PrestamosPlanesDto>());
     }
 
-    [Authorize]
-    [HttpPost("AltaEvolPrestamos")]
+    [HttpPost("prestamos/AltaEvolPrestamos")]
     public async Task<IActionResult> AltaEvolPrestamos([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolPrestamos(json.GetRawText());
         return Ok(res);
     }
-    [Authorize]
-    [HttpGet("ConsultaEvolPrestamos/{cuit}")]
+    [HttpGet("prestamos/ConsultaEvolPrestamos/{cuit}")]
     public async Task<IActionResult> ConsultaEvolPrestamos(string cuit)
     {
-        var res = await _repo.ConsultaEvolPrestamos(cuit);
-        return Ok(res);
+        var prestamos = await _repo.ConsultaEvolPrestamos(cuit);
+
+        if (prestamos == null || !prestamos.Any())
+            return NotFound(new { exito = false, mensaje = "No se encontraron préstamos para el CUIT indicado." });
+
+        return Ok(prestamos);
     }
 }

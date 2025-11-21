@@ -63,6 +63,7 @@ public class PrestamosController : ControllerBase
     }
 
     [HttpPost("prestamos/agregar")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolPrestamos(json.GetRawText());

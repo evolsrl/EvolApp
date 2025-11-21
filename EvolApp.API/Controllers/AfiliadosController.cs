@@ -16,6 +16,7 @@ public class AfiliadosController : ControllerBase
     public AfiliadosController(IAfiliadoRepository repo) => _repo = repo;
     // GET /api/afiliados/{dni}
     [HttpGet("{documentoOCuit}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<AfiliadoDto>> ObtenerPorDocumento(string documentoOCuit)
     {
         var afi = await _repo.ObtenerPorDocumento(documentoOCuit);
@@ -23,6 +24,7 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/{dni}/enviar-codigo
     [HttpPost("{dni}/enviar-codigo")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> EnviarCodigo(string dni)
     {
         await _repo.EnviarCodigo(dni);
@@ -30,6 +32,7 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/{dni}/verificar
     [HttpPost("{dni}/verificar")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<ResultadoDTO>> VerificarCodigo(string dni, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("codigo", out var c)) return BadRequest();
@@ -38,6 +41,7 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/auth/registrar
     [HttpPost("auth/registrar")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<ResultadoDTO>> RegistrarAfiliado([FromBody] JsonElement body)
     {
         try
@@ -109,6 +113,7 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/auth/login
     [HttpPost("auth/login")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<AfiliadoDto>> LoguearAfiliado([FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("identificador", out var userProp) ||
@@ -126,6 +131,7 @@ public class AfiliadosController : ControllerBase
     }
     // GET /api/afiliados/formas-cobros-afiliados/{id}
     [HttpGet("formas-cobros-afiliados/{documentoOCuit}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<IEnumerable<FormaCobroDto>>> ObtenerFormasCobrosPorDocumento(string documentoOCuit)
     {
         var formas = await _repo.ObtenerFormasCobrosPorDocumento(documentoOCuit);
@@ -142,6 +148,7 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("agregar")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolSocios(json.GetRawText());
@@ -158,6 +165,7 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("actualizar")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Actualizar([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());

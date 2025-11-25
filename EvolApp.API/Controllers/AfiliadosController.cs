@@ -148,7 +148,6 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("agregar")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolSocios(json.GetRawText());
@@ -165,7 +164,6 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("actualizar")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> Actualizar([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());

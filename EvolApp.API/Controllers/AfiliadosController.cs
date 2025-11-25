@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Text.Json;
+using EvolApp.API.Swagger;
 
 [ApiController]
 [Route("api/afiliados")]
@@ -148,6 +149,64 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("agregar")]
+    [JsonBodyExample("""
+         {
+            "Nombre": "JORGE ANTONIO",
+            "Apellido": "REYNOSO",
+            "TipoDocumento": "DNI",
+            "NumeroDocumento": 27000001,
+            "CUIL": 20270000014,
+            "NumeroSocio": "101172",
+            "MatriculaIAF": 1435,
+            "Sexo": "Masculino",
+            "FechaNacimiento": "1973-05-31T00:00:00",
+            "FechaIngreso": "2009-03-20T00:00:00",
+            "TipoPersona": "Fisica",
+            "AfiliadoTipo": "Titular",
+            "EstadoCivil": "Casado/a",
+            "CorreoElectronico": "NO TIENE",
+            "Categoria": "Activo",
+            "Estado": "Normal",
+            "Dependencia": "0",
+            "CBU": null,
+            "Filial": "Sede Central",
+            "Domicilios": [
+                {
+                    "IdDomicilio": 0,
+                    "IdDomicilioTipo": 1,
+                    "DomicilioTipo": "Particular",
+                    "Calle": "BELGRANO",
+                    "Numero": 124,
+                    "Piso": 0,
+                    "Departamento": "0",
+                    "IdCodigoPostal": 0,
+                    "IdProvincia": 2,
+                    "Provincia": "Buenos Aires",
+                    "Localidad": "SAN ANTONIO DE ARECO",
+                    "Predeterminado": true,
+                    "IdEstado": 1,
+                    "CodigoPostal": "2760"
+                }
+            ],
+            "Telefonos": [
+                {
+                    "IdTelefono": 0,
+                    "IdTelefonoTipo": 3,
+                    "Numero": 541127733687,
+                    "Interno": 0,
+                    "IdEstado": 1
+                }
+            ],
+            "FormasCobros": [
+                {
+                    "FormaCobro": "Caja",
+                    "Predeterminado": false,
+                    "IdEstado": 1,
+                    "IdFormaCobroAfiliado": 0
+                }
+            ]
+        } 
+        """)]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolSocios(json.GetRawText());
@@ -164,6 +223,64 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
     [HttpPost("actualizar")]
+    [JsonBodyExample("""
+         {
+            "Nombre": "JORGE ANTONIO",
+            "Apellido": "REYNOSO",
+            "TipoDocumento": "DNI",
+            "NumeroDocumento": 27000001,
+            "CUIL": 20270000014,
+            "NumeroSocio": "101172",
+            "MatriculaIAF": 1435,
+            "Sexo": "Masculino",
+            "FechaNacimiento": "1973-05-31T00:00:00",
+            "FechaIngreso": "2009-03-20T00:00:00",
+            "TipoPersona": "Fisica",
+            "AfiliadoTipo": "Titular",
+            "EstadoCivil": "Casado/a",
+            "CorreoElectronico": "NO TIENE",
+            "Categoria": "Activo",
+            "Estado": "Normal",
+            "Dependencia": "0",
+            "CBU": null,
+            "Filial": "Sede Central",
+            "Domicilios": [
+                {
+                    "IdDomicilio": 0,
+                    "IdDomicilioTipo": 1,
+                    "DomicilioTipo": "Particular",
+                    "Calle": "BELGRANO",
+                    "Numero": 124,
+                    "Piso": 0,
+                    "Departamento": "0",
+                    "IdCodigoPostal": 0,
+                    "IdProvincia": 2,
+                    "Provincia": "Buenos Aires",
+                    "Localidad": "SAN ANTONIO DE ARECO",
+                    "Predeterminado": true,
+                    "IdEstado": 1,
+                    "CodigoPostal": "2760"
+                }
+            ],
+            "Telefonos": [
+                {
+                    "IdTelefono": 0,
+                    "IdTelefonoTipo": 3,
+                    "Numero": 541127733687,
+                    "Interno": 0,
+                    "IdEstado": 1
+                }
+            ],
+            "FormasCobros": [
+                {
+                    "FormaCobro": "Caja",
+                    "Predeterminado": false,
+                    "IdEstado": 1,
+                    "IdFormaCobroAfiliado": 0
+                }
+            ]
+        } 
+        """)]
     public async Task<IActionResult> Actualizar([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());

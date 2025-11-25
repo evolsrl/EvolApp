@@ -5,6 +5,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Data;
+using EvolApp.API.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,8 @@ builder.Services.AddSwaggerGen(c =>
         Title = "EvolApp API",
         Version = "v1"
     });
+
+    c.OperationFilter<JsonBodyExampleOperationFilter>();
 
     // Definición del esquema de seguridad por API-KEY
     c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme

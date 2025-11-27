@@ -46,8 +46,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "EvolApp API",
-        Version = "v1"
+        Title = "EvolApp API v2",
+        Version = "v2"
     });
 
     c.OperationFilter<JsonBodyExampleOperationFilter>();
@@ -80,9 +80,20 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+// Habilitar archivos estáticos (para servir /images y /swagger/custom.css)
+app.UseStaticFiles();
 
 app.UseSwagger();
-app.UseSwaggerUI();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("v1/swagger.json", "EvolApp API v2");
+
+    // Título del HTML de Swagger (pestaña del navegador)
+    c.DocumentTitle = "EvolApp API - Documentación";
+
+    // Inyectar tu CSS personalizado
+    c.InjectStylesheet("../swagger/custom.css");
+});
 
 app.UseCors("AllowAll");
 

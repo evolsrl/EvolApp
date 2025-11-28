@@ -32,11 +32,12 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 });
 
 builder.Services.AddScoped<IAfiliadoRepository, AfiliadoRepository>();
-builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IAhorroRepository, AhorroRepository>();
 builder.Services.AddScoped<IEleccionRepository, EleccionRepository>();
-builder.Services.AddScoped<IVotacionRepository, VotacionRepository>();
-builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
 builder.Services.AddScoped<IGeneralesRepository, GeneralesRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
+builder.Services.AddScoped<IVotacionRepository, VotacionRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

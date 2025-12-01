@@ -1,11 +1,14 @@
 ﻿using EvolApp.API.Data;
 using EvolApp.API.Repositories;
 using EvolApp.API.Repositories.Interfaces;
+using EvolApp.API.Swagger;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using System.Data;
-using EvolApp.API.Swagger;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,33 +54,38 @@ builder.Services.AddSwaggerGen(c =>
         Version = "v2"
     });
 
-    c.OperationFilter<JsonBodyExampleOperationFilter>();
-
     // Definición del esquema de seguridad por API-KEY
     c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
-        Description = "Ingrese la API Key en el header. Ejemplo: X-API-KEY: {tu-clave}",
-        Name = "X-API-KEY",                // 👈 CAMBIÁ esto si tu header se llama distinto
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "ApiKeyScheme"
+        Name = "X-API-KEY",                 // nombre del header
+        In = ParameterLocation.Header,      // va en el header
+        Type = SecuritySchemeType.ApiKey,   // tipo ApiKey
+        Description = "Ingrese la API Key en el header. Ejemplo: X-API-KEY: {tu-clave}"
     });
 
-    // Requerir API-KEY en todos los endpoints
+
+    // 🔐 Requerir API-KEY en todos los endpoints (sin usar OpenApiReference)
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "ApiKey"          // 👈 mismo ID que arriba
-                }
+                Name = "X-API-KEY",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey
             },
             Array.Empty<string>()
         }
     });
+
+    // Filtro de rutas (whitelist de endpoints)
+    c.DocumentFilter<MostrarSoloRutasPorConfigDocumentFilter>();
+    // 👇 Filtro de schemas (whitelist / vacío = ninguno)
+    c.DocumentFilter<MostrarSoloSchemasPorConfigDocumentFilter>();
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
 
 var app = builder.Build();

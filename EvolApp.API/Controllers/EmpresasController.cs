@@ -7,7 +7,6 @@ namespace EvolApp.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public class EmpresasController : ControllerBase
     {
         private readonly IConfiguration _configuration;

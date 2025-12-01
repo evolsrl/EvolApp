@@ -17,7 +17,6 @@ public class AfiliadosController : ControllerBase
     public AfiliadosController(IAfiliadoRepository repo) => _repo = repo;
     // GET /api/afiliados/{dni}
     [HttpGet("{documentoOCuit}")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<AfiliadoDto>> ObtenerPorDocumento(string documentoOCuit)
     {
         var afi = await _repo.ObtenerPorDocumento(documentoOCuit);
@@ -25,7 +24,6 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/{dni}/enviar-codigo
     [HttpPost("{dni}/enviar-codigo")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<IActionResult> EnviarCodigo(string dni)
     {
         await _repo.EnviarCodigo(dni);
@@ -33,7 +31,6 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/{dni}/verificar
     [HttpPost("{dni}/verificar")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<ResultadoDTO>> VerificarCodigo(string dni, [FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("codigo", out var c)) return BadRequest();
@@ -42,7 +39,6 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/auth/registrar
     [HttpPost("auth/registrar")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<ResultadoDTO>> RegistrarAfiliado([FromBody] JsonElement body)
     {
         try
@@ -114,7 +110,6 @@ public class AfiliadosController : ControllerBase
     }
     // POST /api/afiliados/auth/login
     [HttpPost("auth/login")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<AfiliadoDto>> LoguearAfiliado([FromBody] JsonElement body)
     {
         if (!body.TryGetProperty("identificador", out var userProp) ||
@@ -132,7 +127,6 @@ public class AfiliadosController : ControllerBase
     }
     // GET /api/afiliados/formas-cobros-afiliados/{id}
     [HttpGet("formas-cobros-afiliados/{documentoOCuit}")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<IEnumerable<FormaCobroDto>>> ObtenerFormasCobrosPorDocumento(string documentoOCuit)
     {
         var formas = await _repo.ObtenerFormasCobrosPorDocumento(documentoOCuit);
@@ -148,70 +142,89 @@ public class AfiliadosController : ControllerBase
 
         return Ok(res);
     }
+
+    /// <summary>
+    /// Agrega un afiliado
+    /// </summary>
+    /// <remarks>
+    /// <code>
+    ///     {
+    ///        "Nombre": "JORGE ANTONIO",
+    ///        "Apellido": "REYNOSO",
+    ///        "TipoDocumento": "DNI",
+    ///        "NumeroDocumento": 27000001,
+    ///        "CUIL": 20270000014,
+    ///        "NumeroSocio": "101172",
+    ///        "MatriculaIAF": 1435,
+    ///        "Sexo": "Masculino",
+    ///        "FechaNacimiento": "1973-05-31T00:00:00",
+    ///        "FechaIngreso": "2009-03-20T00:00:00",
+    ///        "TipoPersona": "Fisica",
+    ///        "AfiliadoTipo": "Titular",
+    ///        "EstadoCivil": "Casado/a",
+    ///        "CorreoElectronico": "NO TIENE",
+    ///        "Categoria": "Activo",
+    ///        "Estado": "Normal",
+    ///        "Dependencia": "0",
+    ///        "CBU": null,
+    ///        "Filial": "Sede Central",
+    ///        "Domicilios": [
+    ///            {
+    ///                "IdDomicilio": 0,
+    ///                "IdDomicilioTipo": 1,
+    ///                "DomicilioTipo": "Particular",
+    ///                "Calle": "BELGRANO",
+    ///                "Numero": 124,
+    ///                "Piso": 0,
+    ///                "Departamento": "0",
+    ///                "IdCodigoPostal": 0,
+    ///                "IdProvincia": 2,
+    ///                "Provincia": "Buenos Aires",
+    ///                "Localidad": "SAN ANTONIO DE ARECO",
+    ///                "Predeterminado": true,
+    ///                "IdEstado": 1,
+    ///                "CodigoPostal": "2760"
+    ///            }
+    ///        ],
+    ///        "Telefonos": [
+    ///            {
+    ///                "IdTelefono": 0,
+    ///                "IdTelefonoTipo": 3,
+    ///                "Numero": 541127733687,
+    ///                "Interno": 0,
+    ///                "IdEstado": 1
+    ///            }
+    ///        ],
+    ///        "FormasCobros": [
+    ///            {
+    ///                "FormaCobro": "Caja",
+    ///                "Predeterminado": false,
+    ///                "IdEstado": 1,
+    ///                "IdFormaCobroAfiliado": 0
+    ///            }
+    ///        ]
+    ///    } 
+    ///    </code>
+    /// </remarks>>
+    /// <param name="json"></param>
+    ///     json con los datos del afiliado
+    /// <returns></returns>
     [HttpPost("agregar")]
-    [JsonBodyExample("""
-         {
-            "Nombre": "JORGE ANTONIO",
-            "Apellido": "REYNOSO",
-            "TipoDocumento": "DNI",
-            "NumeroDocumento": 27000001,
-            "CUIL": 20270000014,
-            "NumeroSocio": "101172",
-            "MatriculaIAF": 1435,
-            "Sexo": "Masculino",
-            "FechaNacimiento": "1973-05-31T00:00:00",
-            "FechaIngreso": "2009-03-20T00:00:00",
-            "TipoPersona": "Fisica",
-            "AfiliadoTipo": "Titular",
-            "EstadoCivil": "Casado/a",
-            "CorreoElectronico": "NO TIENE",
-            "Categoria": "Activo",
-            "Estado": "Normal",
-            "Dependencia": "0",
-            "CBU": null,
-            "Filial": "Sede Central",
-            "Domicilios": [
-                {
-                    "IdDomicilio": 0,
-                    "IdDomicilioTipo": 1,
-                    "DomicilioTipo": "Particular",
-                    "Calle": "BELGRANO",
-                    "Numero": 124,
-                    "Piso": 0,
-                    "Departamento": "0",
-                    "IdCodigoPostal": 0,
-                    "IdProvincia": 2,
-                    "Provincia": "Buenos Aires",
-                    "Localidad": "SAN ANTONIO DE ARECO",
-                    "Predeterminado": true,
-                    "IdEstado": 1,
-                    "CodigoPostal": "2760"
-                }
-            ],
-            "Telefonos": [
-                {
-                    "IdTelefono": 0,
-                    "IdTelefonoTipo": 3,
-                    "Numero": 541127733687,
-                    "Interno": 0,
-                    "IdEstado": 1
-                }
-            ],
-            "FormasCobros": [
-                {
-                    "FormaCobro": "Caja",
-                    "Predeterminado": false,
-                    "IdEstado": 1,
-                    "IdFormaCobroAfiliado": 0
-                }
-            ]
-        } 
-        """)]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolSocios(json.GetRawText());
         return Ok(res);
     }
+
+    /// <summary>
+    /// Devuelve los datos de un Afiliado/Socio por su CUIT.
+    /// </summary>
+    /// <remarks>
+    /// </remarks>
+    /// <param name="cuit">CUIT (Clave Única de Identificación Tributaria) Debe ser no nula y una cadena de texto de solo números
+    /// </param>
+    /// <returns>
+    /// </returns>
     [HttpGet("consultar/{cuit}")]
     public async Task<IActionResult> Consultar(string cuit)
     {
@@ -222,65 +235,75 @@ public class AfiliadosController : ControllerBase
 
         return Ok(res);
     }
+
+    /// <summary>
+    /// Actualiza un afiliado
+    /// </summary>
+    /// <remarks>
+    /// <code>
+    /// {
+    ///        "Nombre": "JORGE ANTONIO",
+    ///        "Apellido": "REYNOSO",
+    ///        "TipoDocumento": "DNI",
+    ///        "NumeroDocumento": 27000001,
+    ///        "CUIL": 20270000014,
+    ///        "NumeroSocio": "101172",
+    ///        "MatriculaIAF": 1435,
+    ///        "Sexo": "Masculino",
+    ///        "FechaNacimiento": "1973-05-31T00:00:00",
+    ///        "FechaIngreso": "2009-03-20T00:00:00",
+    ///        "TipoPersona": "Fisica",
+    ///        "AfiliadoTipo": "Titular",
+    ///        "EstadoCivil": "Casado/a",
+    ///        "CorreoElectronico": "NO TIENE",
+    ///        "Categoria": "Activo",
+    ///        "Estado": "Normal",
+    ///        "Dependencia": "0",
+    ///        "CBU": null,
+    ///        "Filial": "Sede Central",
+    ///        "Domicilios": [
+    ///            {
+    ///                "IdDomicilio": 0,
+    ///                "IdDomicilioTipo": 1,
+    ///                "DomicilioTipo": "Particular",
+    ///                "Calle": "BELGRANO",
+    ///                "Numero": 124,
+    ///                "Piso": 0,
+    ///                "Departamento": "0",
+    ///                "IdCodigoPostal": 0,
+    ///                "IdProvincia": 2,
+    ///                "Provincia": "Buenos Aires",
+    ///                "Localidad": "SAN ANTONIO DE ARECO",
+    ///                "Predeterminado": true,
+    ///                "IdEstado": 1,
+    ///                "CodigoPostal": "2760"
+    ///            }
+    ///        ],
+    ///        "Telefonos": [
+    ///            {
+    ///                "IdTelefono": 0,
+    ///                "IdTelefonoTipo": 3,
+    ///                "Numero": 541127733687,
+    ///                "Interno": 0,
+    ///                "IdEstado": 1
+    ///            }
+    ///        ],
+    ///        "FormasCobros": [
+    ///            {
+    ///                "FormaCobro": "Caja",
+    ///                "Predeterminado": false,
+    ///                "IdEstado": 1,
+    ///                "IdFormaCobroAfiliado": 0
+    ///            }
+    ///        ]
+    ///    } 
+    /// </code>
+    /// </remarks>
+    /// <param name="json">
+    /// json con los datos del afiliado
+    /// </param>
+    /// <returns></returns>
     [HttpPost("actualizar")]
-    [JsonBodyExample("""
-         {
-            "Nombre": "JORGE ANTONIO",
-            "Apellido": "REYNOSO",
-            "TipoDocumento": "DNI",
-            "NumeroDocumento": 27000001,
-            "CUIL": 20270000014,
-            "NumeroSocio": "101172",
-            "MatriculaIAF": 1435,
-            "Sexo": "Masculino",
-            "FechaNacimiento": "1973-05-31T00:00:00",
-            "FechaIngreso": "2009-03-20T00:00:00",
-            "TipoPersona": "Fisica",
-            "AfiliadoTipo": "Titular",
-            "EstadoCivil": "Casado/a",
-            "CorreoElectronico": "NO TIENE",
-            "Categoria": "Activo",
-            "Estado": "Normal",
-            "Dependencia": "0",
-            "CBU": null,
-            "Filial": "Sede Central",
-            "Domicilios": [
-                {
-                    "IdDomicilio": 0,
-                    "IdDomicilioTipo": 1,
-                    "DomicilioTipo": "Particular",
-                    "Calle": "BELGRANO",
-                    "Numero": 124,
-                    "Piso": 0,
-                    "Departamento": "0",
-                    "IdCodigoPostal": 0,
-                    "IdProvincia": 2,
-                    "Provincia": "Buenos Aires",
-                    "Localidad": "SAN ANTONIO DE ARECO",
-                    "Predeterminado": true,
-                    "IdEstado": 1,
-                    "CodigoPostal": "2760"
-                }
-            ],
-            "Telefonos": [
-                {
-                    "IdTelefono": 0,
-                    "IdTelefonoTipo": 3,
-                    "Numero": 541127733687,
-                    "Interno": 0,
-                    "IdEstado": 1
-                }
-            ],
-            "FormasCobros": [
-                {
-                    "FormaCobro": "Caja",
-                    "Predeterminado": false,
-                    "IdEstado": 1,
-                    "IdFormaCobroAfiliado": 0
-                }
-            ]
-        } 
-        """)]
     public async Task<IActionResult> Actualizar([FromBody] JsonElement json)
     {
         var res = await _repo.ActualizarEvolSocios(json.GetRawText());

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/listas")]
-[ApiExplorerSettings(IgnoreApi = true)]
 public class ListasController : ControllerBase
 {
     private readonly IEleccionRepository _repo;

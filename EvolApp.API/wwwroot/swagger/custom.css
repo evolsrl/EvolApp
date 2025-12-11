@@ -1,0 +1,33 @@
+﻿/* Cambiar color barra superior (para verificar que el CSS se aplica) */
+.swagger-ui .topbar {
+    background-color: #021c3a !important;
+}
+
+    /* Aseguramos tamaño y layout del link del logo */
+    .swagger-ui .topbar .link {
+        display: flex;
+        align-items: center;
+        height: 50px;
+    }
+
+        /* 🔹 OCULTAR EL SVG QUE TRAE SWAGGER POR DEFECTO */
+        .swagger-ui .topbar .link svg {
+            display: none !important;
+        }
+
+        /* 🔹 OPCIONAL: ocultar el texto Swagger si aparece */
+        .swagger-ui .topbar .link span {
+            display: none !important;
+        }
+
+        /* 🔹 AGREGAR TU LOGO COMO PSEUDO-ELEMENTO */
+        .swagger-ui .topbar .link::before {
+            content: "";
+            display: block;
+            width: 70px; /* ajustá según tu logo */
+            height: 70px;
+            border-radius:34px;
+            background-image: url("../images/evol-logo.png"); /* relativo a /swagger/index.html */
+            background-repeat: no-repeat;
+            background-size: contain;
+        }

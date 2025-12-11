@@ -33,6 +33,13 @@ namespace EvolApp.API.Repositories
                 commandType: CommandType.StoredProcedure);
             return result;
         }
+        public async Task<AfiliadoDto?> ObtenerCredencialPorDocumento(string documentoOCuit)
+        {
+            return await _db.QuerySingleOrDefaultAsync<AfiliadoDto>(
+                "EvolAppApiAfiliadosSeleccionarCredencialPorDNI",
+                new { DocumentoOCuit = documentoOCuit },
+                commandType: CommandType.StoredProcedure);
+        }
         public async Task<ResultadoDTO?> RegistrarAfiliado(string documento, string username, string password)
         {
             try

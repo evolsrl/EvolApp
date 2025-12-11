@@ -1,4 +1,6 @@
-﻿namespace EvolApp.Shared.DTOs
+﻿using System.Buffers.Text;
+
+namespace EvolApp.Shared.DTOs
 {
     public class AfiliadoDto
     {
@@ -11,5 +13,6 @@
         public bool Exito { get; set; } = Convert.ToBoolean(0);
         public bool TieneCuenta { get; set; } = Convert.ToBoolean(0);
         public string Mensaje { get; set; } = string.Empty;
+        public string CredencialDigital { get; set; } = string.Empty;
     }
 }

@@ -7,6 +7,9 @@
         public decimal ImporteGasto { get; set; }
         public string Descripcion { get; set; } = string.Empty;
         public int IdEstado { get; set; }
+        public int IdPrestamoPlanTasa { get; set; }
+        public int CantidadCuotas { get; set; }
+        public int CantidadCuotasHasta { get; set; }
         public DateTime FechaAlta { get; set; }
         public int IdUsuarioEvento { get; set; }
         public DateTime FechaInicioVigencia { get; set; }
@@ -16,5 +19,7 @@
         public int IdTipoUnidad { get; set; }
         public decimal PorcentajeSeguroCuota { get; set; }
         public decimal RedondeoCuota { get; set; }
+        public decimal ImporteDesde { get; set; }
+        public decimal ImporteHasta { get; set; }
     }
 }

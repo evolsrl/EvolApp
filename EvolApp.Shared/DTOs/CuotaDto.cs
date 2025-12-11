@@ -8,4 +8,8 @@ public record CuotaDto
     public bool? Pagado { get; init; }
     public string? Estado { get; init; }
     public DateTime? FechaPago { get; init; }
+    public int NumeroCuota { get; set; }
+    public string Interes { get; set; } = string.Empty;
+    public string Amortizacion { get; set; } = string.Empty;
+    public string Saldo { get; set; } = string.Empty;
 }

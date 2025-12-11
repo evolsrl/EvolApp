@@ -9,12 +9,18 @@ namespace EvolApp.API.Repositories
         private readonly IDbConnection _db;
         public MenuRepository(IDbConnection db) => _db = db;
 
-        public async Task<IEnumerable<OpcionMenuDto>> GetOpcionesAsync(string documento)
+        public async Task<List<NavItemDto>> GetOpcionesAsync(string documento)
         {
-            return await _db.QueryAsync<OpcionMenuDto>(
+            var navbar = await _db.QueryAsync<NavItemDto>(
                 "EvolAppApiGetMenuOpciones",
-                new { Documento = documento },
-                commandType: CommandType.StoredProcedure);
+                new
+                {
+                    NumeroDocumento = documento
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            return navbar.ToList();
         }
     }
 }

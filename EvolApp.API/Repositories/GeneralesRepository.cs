@@ -16,4 +16,11 @@ public class GeneralesRepository : IGeneralesRepository
             "EvolAppApiEleccionesSeleccionar",
             commandType: CommandType.StoredProcedure);
     }
+    public async Task<ResultadoDTO> GetEndpoint(string cuit)
+    {
+        return await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+            "EvolAppApiObtenerEndpointPorCuit",
+            new { Cuit = cuit },
+            commandType: CommandType.StoredProcedure);
+    }
 }

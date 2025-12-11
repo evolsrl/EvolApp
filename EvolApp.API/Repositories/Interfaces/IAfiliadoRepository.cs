@@ -8,6 +8,7 @@ namespace EvolApp.API.Repositories.Interfaces
         Task<AfiliadoDto?> ObtenerPorDocumento(string documentoOCuit);
         Task EnviarCodigo(string documento);
         Task<ResultadoDTO> VerificarCodigo(string documento, string codigo);
+        Task<AfiliadoDto?> ObtenerCredencialPorDocumento(string documentoOCuit);
         Task<ResultadoDTO> RegistrarAfiliado(string documento, string username, string password);
         Task<AfiliadoDto?> LoguearAfiliado(string documento, string password);
         Task<IEnumerable<FormaCobroDto>> ObtenerFormasCobrosPorDocumento(string documentoOCuit);

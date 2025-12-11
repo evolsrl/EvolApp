@@ -40,6 +40,14 @@ public class AfiliadosController : ControllerBase
         var ok = await _repo.VerificarCodigo(dni, c.GetString()!);
         return Ok(ok);
     }
+    // GET /api/afiliados/{dni}/credencial
+    [HttpGet("{documentoOCuit}/credencial")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ActionResult<AfiliadoDto>> ObtenerCredencialPorDocumento(string documentoOCuit)
+    {
+        var afi = await _repo.ObtenerCredencialPorDocumento(documentoOCuit);
+        return Ok(afi);
+    }
     // POST /api/afiliados/auth/registrar
     [HttpPost("auth/registrar")]
     [ApiExplorerSettings(IgnoreApi = true)]

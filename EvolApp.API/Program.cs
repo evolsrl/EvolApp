@@ -37,6 +37,7 @@ builder.Services.AddScoped<IEleccionRepository, EleccionRepository>();
 builder.Services.AddScoped<IVotacionRepository, VotacionRepository>();
 builder.Services.AddScoped<IPrestamoRepository, PrestamoRepository>();
 builder.Services.AddScoped<IGeneralesRepository, GeneralesRepository>();
+builder.Services.AddScoped<ICargosRepository, CargosRepository>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

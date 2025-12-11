@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
-using EvolAppSocios.Models;
 using System.Data;
 using System.Dynamic;
 using System.Text.Json;
@@ -24,6 +23,26 @@ public class PrestamoRepository : IPrestamoRepository
         {
             var list = await _db.QueryAsync<PrestamoDto>(
                 "EvolAppApiPrestamosSeleccionarPorDocumento",
+                p,
+                commandType: CommandType.StoredProcedure);
+
+            return list;
+        }
+        catch (Exception ex)
+        {
+            // Agregar log de error
+            throw new Exception("Error al consultar la base de datos.", ex);
+        }
+    }
+    public async Task<IEnumerable<CuotaProximaDto>> ObtenerCuotasProximasVencerPorDocumento(string documentoOCuit)
+    {
+        var p = new DynamicParameters();
+        p.Add("@DocumentoOCuit", documentoOCuit);
+
+        try
+        {
+            var list = await _db.QueryAsync<CuotaProximaDto>(
+                "EvolAppApiPrestamosSeleccionarCuotasProximasVencerPorDocumento",
                 p,
                 commandType: CommandType.StoredProcedure);
 
@@ -72,6 +91,42 @@ public class PrestamoRepository : IPrestamoRepository
         var cuotas = (await grid.ReadAsync<CuotaDto>()).ToList();
 
         return cabecera with { Cuponera = cuotas };
+    }
+    public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPrestamoSimulacion()
+    {
+        return await _db.QueryAsync<PrestamosPlanesDto>(
+            "EvolAppApiSelectPrePrestamosPlanes",
+            commandType: CommandType.StoredProcedure);
+    }
+    public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPrestamosCantidadCuotasSimulacion(string idPlan)
+    {
+        return await _db.QueryAsync<PrestamosPlanesDto>(
+            "EvolAppApiSelectPrePrestamosCantidadCuotas",
+            new { IdPlan = idPlan },
+            commandType: CommandType.StoredProcedure);
+    }
+    public async Task<List<CuotaDto>> ArmarCuponera(
+    int? idTipoOperacion,
+    int idPrestamoPlan,
+    int? idPrestamoPlanTasa,
+    int cantidadCuotas,
+    string importeSolicitado
+)
+    {
+        var cuotas = await _db.QueryAsync<CuotaDto>(
+            "EvolAppApiPrePrestamosArmarCuponera",
+            new
+            {
+                IdTipoOperacion = idTipoOperacion,
+                IdPrestamoPlan = idPrestamoPlan,
+                IdPrestamoPlanTasa = idPrestamoPlanTasa,
+                CantidadCuotas = cantidadCuotas,
+                ImporteSolicitado = importeSolicitado
+            },
+            commandType: CommandType.StoredProcedure
+        );
+
+        return cuotas.ToList();
     }
     public async Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro)
     {

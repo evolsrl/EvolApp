@@ -4,14 +4,21 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/menu")]
-[ApiExplorerSettings(IgnoreApi = true)]
 public class MenuController : ControllerBase
 {
     private readonly IMenuRepository _repo;
     public MenuController(IMenuRepository repo) => _repo = repo;
 
-    // GET /api/menu/{dni}
-    [HttpGet("{dni}")]
-    public async Task<ActionResult<IEnumerable<OpcionMenuDto>>> Get(string dni)
-        => Ok(await _repo.GetOpcionesAsync(dni));
+    // GET /api/menu/{documento}
+    [HttpGet("{documento}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ActionResult<List<NavItemDto>>> GetOpcionesAsync([FromRoute] string documento)
+    {
+        if (string.IsNullOrWhiteSpace(documento))
+            return BadRequest("DocumentoOCuit de préstamo requerido.");
+
+        var result = await _repo.GetOpcionesAsync(documento);
+
+        return Ok(result);
+    }
 }

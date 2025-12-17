@@ -1,13 +1,10 @@
-﻿using Dapper;
-using EvolApp.API.Repositories.Interfaces;
+﻿using EvolApp.API.Repositories.Interfaces;
 using EvolApp.Shared.DTOs;
-using EvolApp.Shared.Models;
 using EvolAppSocios.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Text.Json;
-using EvolApp.API.Swagger;
+using Microsoft.VisualBasic;
+
 
 [ApiController]
 [Route("api/afiliados")]
@@ -37,7 +34,7 @@ public class AfiliadosController : ControllerBase
         var ok = await _repo.VerificarCodigo(dni, c.GetString()!);
         return Ok(ok);
     }
-    // GET /api/afiliados/{dni}/credencial
+    // GET /api/afiliados/{dni}/credencial  (JSON como hoy)
     [HttpGet("{documentoOCuit}/credencial")]
     [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<AfiliadoDto>> ObtenerCredencialPorDocumento(string documentoOCuit)
@@ -45,6 +42,39 @@ public class AfiliadosController : ControllerBase
         var afi = await _repo.ObtenerCredencialPorDocumento(documentoOCuit);
         return Ok(afi);
     }
+    // SACAR: using Microsoft.VisualBasic;
+
+    [HttpGet("{documentoOCuit}/credencial.png")]
+    [Produces("image/png")]
+    public async Task<IActionResult> ObtenerCredencialPng(string documentoOCuit, [FromQuery] int page = 0)
+    {
+        if (page < 0) return BadRequest("Parámetro 'page' inválido.");
+
+        var pdfBytes = await _repo.ObtenerCredencialPdfPorDocumento(documentoOCuit);
+        if (pdfBytes == null || pdfBytes.Length == 0)
+            return NotFound("No se encontró la credencial en PDF.");
+
+        Response.Headers["Cache-Control"] = "no-store";
+
+        var tmpPng = Path.Combine(Path.GetTempPath(), $"cred_{documentoOCuit}_{page}_{Guid.NewGuid():N}.png");
+
+        try
+        {
+            await using var ms = new MemoryStream(pdfBytes, writable: false);
+            ms.Position = 0;
+
+            // OJO: nombre completo para evitar conflictos
+            PDFtoImage.Conversion.SavePng(tmpPng, ms, page);
+
+            var pngBytes = await System.IO.File.ReadAllBytesAsync(tmpPng);
+            return File(pngBytes, "image/png", $"Credencial_{documentoOCuit}_p{page}.png");
+        }
+        finally
+        {
+            try { if (System.IO.File.Exists(tmpPng)) System.IO.File.Delete(tmpPng); } catch { }
+        }
+    }
+
     // POST /api/afiliados/auth/registrar
     [HttpPost("auth/registrar")]
     public async Task<ActionResult<ResultadoDTO>> RegistrarAfiliado([FromBody] JsonElement body)

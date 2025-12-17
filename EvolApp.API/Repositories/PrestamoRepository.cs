@@ -34,8 +34,7 @@ public class PrestamoRepository : IPrestamoRepository
             throw new Exception("Error al consultar la base de datos.", ex);
         }
     }
-    public async Task<IEnumerable<CuotaProximaDto>> ObtenerCuotasProximasVencerPorDocumento(string documentoOCuit)
-    {
+    public async Task<IEnumerable<CuotaProximaDto>> ObtenerCuotasProximasVencerPorDocumento(string documentoOCuit){
         var p = new DynamicParameters();
         p.Add("@DocumentoOCuit", documentoOCuit);
 
@@ -196,4 +195,5 @@ public class PrestamoRepository : IPrestamoRepository
 
         return lista;
     }
+    
 }

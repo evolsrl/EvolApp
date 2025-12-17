@@ -4,6 +4,8 @@ using EvolApp.Shared.DTOs;
 using EvolAppSocios.Models;
 using System.Data;
 using System.Dynamic;
+using System.Reflection;
+using System.Text;
 using System.Text.Json;
 namespace EvolApp.API.Repositories
 {
@@ -39,6 +41,99 @@ namespace EvolApp.API.Repositories
                 "EvolAppApiAfiliadosSeleccionarCredencialPorDNI",
                 new { DocumentoOCuit = documentoOCuit },
                 commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<byte[]?> ObtenerCredencialPdfPorDocumento(string documentoOCuit)
+        {
+            var afi = await ObtenerCredencialPorDocumento(documentoOCuit);
+            if (afi == null) return null;
+
+            // 1) Si en algún entorno ya viniera como bytes
+            var bytes = TryGetBytesProperty(afi, "CredencialPdf", "PdfBytes", "Pdf");
+            if (bytes != null && bytes.Length > 0) return bytes;
+
+            // 2) Caso más común: base64 en un string (como tu front ya maneja)
+            var raw = TryGetStringProperty(afi,
+                "CredencialDigital", "credencialDigital",
+                "PdfBase64", "pdfBase64",
+                "Pdf", "pdf");
+
+            if (string.IsNullOrWhiteSpace(raw))
+                return null;
+
+            // Si viene URL, no se puede convertir (salvo que quieras que el backend la descargue)
+            if (raw.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                raw.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("La credencial llegó como URL; se requiere PDF embebido (base64 o varbinary).");
+
+            var base64 = ExtractBase64(raw);
+
+            // Validación mínima: PDF suele empezar con JVBERi0 en base64
+            if (!base64.StartsWith("JVBERi0", StringComparison.Ordinal))
+                throw new InvalidOperationException("El contenido no parece ser un PDF en base64.");
+
+            return Convert.FromBase64String(base64);
+        }
+
+        private static byte[]? TryGetBytesProperty(object obj, params string[] names)
+        {
+            var t = obj.GetType();
+            foreach (var n in names)
+            {
+                var p = t.GetProperty(n, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+                if (p == null) continue;
+                if (p.PropertyType == typeof(byte[]))
+                    return (byte[]?)p.GetValue(obj);
+            }
+            return null;
+        }
+
+        private static string? TryGetStringProperty(object obj, params string[] names)
+        {
+            var t = obj.GetType();
+            foreach (var n in names)
+            {
+                var p = t.GetProperty(n, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+                if (p == null) continue;
+                if (p.PropertyType == typeof(string))
+                    return (string?)p.GetValue(obj);
+            }
+            return null;
+        }
+
+        private static string ExtractBase64(string raw)
+        {
+            raw = raw.Trim();
+
+            // data:application/pdf;base64,...
+            var idx = raw.IndexOf("base64,", StringComparison.OrdinalIgnoreCase);
+            if (raw.StartsWith("data:", StringComparison.OrdinalIgnoreCase) && idx >= 0)
+                raw = raw[(idx + "base64,".Length)..];
+
+            // Si viene “envuelto” (xml/texto), recortar desde el header típico de PDF en base64
+            var jv = raw.IndexOf("JVBERi0", StringComparison.Ordinal);
+            if (jv > 0) raw = raw.Substring(jv);
+
+            // Dejar solo chars base64
+            var sb = new StringBuilder(raw.Length);
+            foreach (var ch in raw)
+            {
+                if ((ch >= 'A' && ch <= 'Z') ||
+                    (ch >= 'a' && ch <= 'z') ||
+                    (ch >= '0' && ch <= '9') ||
+                    ch == '+' || ch == '/' || ch == '=')
+                    sb.Append(ch);
+            }
+
+            var clean = sb.ToString();
+
+            // padding
+            var mod = clean.Length % 4;
+            if (mod == 2) clean += "==";
+            else if (mod == 3) clean += "=";
+            else if (mod == 1) throw new FormatException("Base64 inválido (longitud incorrecta).");
+
+            return clean;
         }
         public async Task<ResultadoDTO?> RegistrarAfiliado(string documento, string username, string password)
         {

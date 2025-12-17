@@ -16,7 +16,10 @@ public class GeneralesController : ControllerBase
     [HttpGet("formas-cobros")]
     public async Task<ActionResult<IEnumerable<FormaCobroDto>>> GetAll()
         => Ok(await _repo.GetAllAsync());
-
+    // GET /api/generales/empresas
+    [HttpGet("empresas")]
+    public async Task<ActionResult<EmpresaDto>> GetEmpresas()
+        => Ok(await _repo.GetEmpresas());
     // GET /api/generales/empresa/endpoint
     [HttpGet("empresa/endpoint")]
     public async Task<ActionResult<ResultadoDTO>> GetEndpoint(string cuit)

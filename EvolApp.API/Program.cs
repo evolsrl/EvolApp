@@ -4,8 +4,6 @@ using EvolApp.API.Repositories.Interfaces;
 using EvolApp.API.Swagger;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using System.Data;
 using System.Reflection;
@@ -25,15 +23,19 @@ builder.Services.AddCors(opt =>
     opt.AddPolicy("AllowAll", p => p
         .AllowAnyOrigin()
         .AllowAnyHeader()
-        .AllowAnyMethod());
+        .AllowAnyMethod()
+        // Para que el front pueda leer el filename si devolvés Content-Disposition
+        .WithExposedHeaders("Content-Disposition"));
 });
 
+// Dapper connection
 builder.Services.AddScoped<IDbConnection>(sp =>
 {
     var cs = sp.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection");
     return new SqlConnection(cs);
 });
 
+// Repos
 builder.Services.AddScoped<IAfiliadoRepository, AfiliadoRepository>();
 builder.Services.AddScoped<IAhorroRepository, AhorroRepository>();
 builder.Services.AddScoped<IEleccionRepository, EleccionRepository>();
@@ -58,14 +60,13 @@ builder.Services.AddSwaggerGen(c =>
     // Definición del esquema de seguridad por API-KEY
     c.AddSecurityDefinition("ApiKey", new OpenApiSecurityScheme
     {
-        Name = "X-API-KEY",                 // nombre del header
-        In = ParameterLocation.Header,      // va en el header
-        Type = SecuritySchemeType.ApiKey,   // tipo ApiKey
+        Name = "X-API-KEY",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
         Description = "Ingrese la API Key en el header. Ejemplo: X-API-KEY: {tu-clave}"
     });
 
-
-    // 🔐 Requerir API-KEY en todos los endpoints (sin usar OpenApiReference)
+    // Requerir API-KEY en todos los endpoints
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -73,15 +74,19 @@ builder.Services.AddSwaggerGen(c =>
             {
                 Name = "X-API-KEY",
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey
+                Type = SecuritySchemeType.ApiKey,
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
             },
             Array.Empty<string>()
         }
     });
 
-    // Filtro de rutas (whitelist de endpoints)
+    // Filtros de whitelist
     c.DocumentFilter<MostrarSoloRutasPorConfigDocumentFilter>();
-    // 👇 Filtro de schemas (whitelist / vacío = ninguno)
     c.DocumentFilter<MostrarSoloSchemasPorConfigDocumentFilter>();
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -90,6 +95,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
 // Habilitar archivos estáticos (para servir /images y /swagger/custom.css)
 app.UseStaticFiles();
 
@@ -97,17 +103,17 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("v1/swagger.json", "EvolApp API v2");
-
-    // Título del HTML de Swagger (pestaña del navegador)
     c.DocumentTitle = "EvolApp API - Documentación";
-
-    // Inyectar tu CSS personalizado
     c.InjectStylesheet("../swagger/custom.css");
 });
 
+// ✅ ORDEN CORRECTO PARA CORS + PRE-FLIGHT
+app.UseRouting();
+
+// CORS antes de cualquier middleware que pueda cortar el request (ApiKey, Auth, etc.)
 app.UseCors("AllowAll");
 
-// 🔐 Middleware de API-KEY
+// 🔐 Middleware de API-KEY (debe permitir OPTIONS dentro del middleware)
 app.UseMiddleware<ApiKeyMiddleware>();
 
 app.UseAuthorization();

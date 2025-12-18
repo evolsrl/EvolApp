@@ -16,9 +16,9 @@ public class GeneralesRepository : IGeneralesRepository
             "EvolAppApiEleccionesSeleccionar",
             commandType: CommandType.StoredProcedure);
     }
-    public async Task<EmpresaDto> GetEmpresas()
+    public async Task<IEnumerable<EmpresaDto>> GetEmpresas()
     {
-        return await _db.QuerySingleOrDefaultAsync<EmpresaDto>(
+        return await _db.QueryAsync<EmpresaDto>(
             "EvolAppApiObtenerEmpresas",
             commandType: CommandType.StoredProcedure);
     }

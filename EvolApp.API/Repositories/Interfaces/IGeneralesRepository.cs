@@ -6,7 +6,7 @@ namespace EvolApp.API.Repositories.Interfaces
     public interface IGeneralesRepository
     {
         Task<IEnumerable<FormaCobroDto>> GetAllAsync();
-        Task<EmpresaDto> GetEmpresas();
+        Task<IEnumerable<EmpresaDto>> GetEmpresas();
         Task<ResultadoDTO> GetEndpoint(string cuit);
     }
 }

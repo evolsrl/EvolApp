@@ -18,7 +18,7 @@ public class GeneralesController : ControllerBase
         => Ok(await _repo.GetAllAsync());
     // GET /api/generales/empresas
     [HttpGet("empresas")]
-    public async Task<ActionResult<EmpresaDto>> GetEmpresas()
+    public async Task<ActionResult<IEnumerable<EmpresaDto>>> GetEmpresas()
         => Ok(await _repo.GetEmpresas());
     // GET /api/generales/empresa/endpoint
     [HttpGet("empresa/endpoint")]

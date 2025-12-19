@@ -146,6 +146,77 @@ public class AfiliadosController : ControllerBase
             });
         }
     }
+    // POST /api/afiliados/auth/reset-password
+    [HttpPost("auth/reset-password")]
+    public async Task<ActionResult<ResultadoDTO>> ResetearContrasenia([FromBody] JsonElement body)
+    {
+        try
+        {
+            if (!body.TryGetProperty("documento", out var documentoProp) ||
+                !body.TryGetProperty("codigo", out var codigoProp) ||
+                !body.TryGetProperty("password", out var passwordProp))
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "Faltan datos obligatorios (documento, codigo o password)."
+                });
+            }
+
+            var documento = documentoProp.GetString();
+            var codigo = codigoProp.GetString();
+            var password = passwordProp.GetString();
+
+            // Validaciones adicionales
+            if (string.IsNullOrEmpty(documento) || string.IsNullOrEmpty(codigo) || string.IsNullOrEmpty(password))
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "El documento, codigo y password son obligatorios."
+                });
+            }
+
+            if (codigo.Length < 4)
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "El usuario debe tener al menos 4 caracteres."
+                });
+            }
+
+            if (password.Length < 6)
+            {
+                return BadRequest(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "La contraseña debe tener al menos 6 caracteres."
+                });
+            }
+
+            var resultado = await _repo.ResetearContrasenia(documento, codigo, password);
+
+            if (resultado == null)
+            {
+                return Ok(new ResultadoDTO
+                {
+                    Exito = Convert.ToBoolean(0),
+                    Mensaje = "Error interno del servidor"
+                });
+            }
+
+            return Ok(resultado);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ResultadoDTO
+            {
+                Exito = Convert.ToBoolean(0),
+                Mensaje = "Error interno del servidor"
+            });
+        }
+    }
     // POST /api/afiliados/auth/login
     [HttpPost("auth/login")]
     public async Task<ActionResult<AfiliadoDto>> LoguearAfiliado([FromBody] JsonElement body)

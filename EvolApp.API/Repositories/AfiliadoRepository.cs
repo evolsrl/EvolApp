@@ -155,6 +155,32 @@ namespace EvolApp.API.Repositories
                 };
             }
         }
+        public async Task<ResultadoDTO> ResetearContrasenia(string documento, string codigo, string password)
+        {
+            try
+            {
+                var result = await _db.QuerySingleOrDefaultAsync<ResultadoDTO>(
+                    "EvolAppApiAfiliadosResetearContrasenia",
+                    new { Documento = documento, Codigo = codigo, Password = password },
+                    commandType: CommandType.StoredProcedure);
+
+                return result ?? new ResultadoDTO
+                {
+                    Exito = false,
+                    Mensaje = "Error interno del servidor"
+                };
+            }
+            catch (Exception)
+            {
+                // Log ex
+                return new ResultadoDTO
+                {
+                    Exito = false,
+                    Mensaje = "Error al procesar el reseteo de contraseña"
+                };
+            }
+        }
+
         public async Task<AfiliadoDto?> LoguearAfiliado(string documento, string password)
         {
             var result = await _db.QuerySingleOrDefaultAsync<AfiliadoDto>(

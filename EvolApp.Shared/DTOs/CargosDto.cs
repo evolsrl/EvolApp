@@ -10,4 +10,5 @@ public record CargosDto
     public string? Concepto { get; init; }
     public decimal? Importe { get; init; }
     public decimal? ImporteCobrado { get; init; }
+    public string? Estado { get; init; }
 }

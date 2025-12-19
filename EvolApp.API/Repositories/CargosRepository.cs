@@ -24,5 +24,18 @@ namespace EvolApp.API.Repositories
 
             return cargos.ToList();
         }
+        public async Task<List<CargosDto>> ObtenerCuentaCorrienteCargos(string documento)
+        {
+            var cargos = await _db.QueryAsync<CargosDto>(
+                "EvolAppApiCarCuentasCorrientesSeleccionarCuentaCorrientePorAfiliadoDataTable",
+                new
+                {
+                    NumeroDocumento = documento
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            return cargos.ToList();
+        }
     }
 }

@@ -20,4 +20,16 @@ public class CargosController : ControllerBase
 
         return Ok(result);
     }
+    // GET /api/cargos/cuenta-corriente/{documento}
+    [HttpGet("cuenta-corriente/{documento}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<ActionResult<List<CargosDto>>> ObtenerCuentaCorrienteCargos([FromRoute] string documento)
+    {
+        if (string.IsNullOrWhiteSpace(documento))
+            return BadRequest("DocumentoOCuit de préstamo requerido.");
+
+        var result = await _repo.ObtenerCuentaCorrienteCargos(documento);
+
+        return Ok(result);
+    }
 }

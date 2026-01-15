@@ -71,9 +71,11 @@ builder.Services.AddSwaggerGen(c =>
         {
             new OpenApiSecurityScheme
             {
-                Name = "X-API-KEY",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "ApiKey"
+                }
             },
             Array.Empty<string>()
         }

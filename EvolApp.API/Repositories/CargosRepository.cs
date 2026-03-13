@@ -11,26 +11,26 @@ namespace EvolApp.API.Repositories
     {
         private readonly IDbConnection _db;
         public CargosRepository(IDbConnection db) => _db = db;
-        public async Task<List<CargosDto>> ObtenerCargosPendientes(string documento)
+        public async Task<List<CargosDto>> ObtenerCargosPendientes(string cuit)
         {
             var cargos = await _db.QueryAsync<CargosDto>(
                 "EvolAppApiCarCuentasCorrientesSeleccionarPendientesPorAfiliadoDataTable",
                 new
                 {
-                    NumeroDocumento = documento
+                    cuit = cuit
                 },
                 commandType: CommandType.StoredProcedure
             );
 
             return cargos.ToList();
         }
-        public async Task<List<CargosDto>> ObtenerCuentaCorrienteCargos(string documento)
+        public async Task<List<CargosDto>> ObtenerCuentaCorrienteCargos(string cuit)
         {
             var cargos = await _db.QueryAsync<CargosDto>(
                 "EvolAppApiCarCuentasCorrientesSeleccionarCuentaCorrientePorAfiliadoDataTable",
                 new
                 {
-                    NumeroDocumento = documento
+                    cuit = cuit
                 },
                 commandType: CommandType.StoredProcedure
             );

@@ -12,21 +12,18 @@ public class AfiliadosController : ControllerBase
 {
     private readonly IAfiliadoRepository _repo;
     public AfiliadosController(IAfiliadoRepository repo) => _repo = repo;
-    // GET /api/afiliados/{dni}
     [HttpGet("{documentoOCuit}")]
     public async Task<ActionResult<AfiliadoDto>> ObtenerPorDocumento(string documentoOCuit)
     {
         var afi = await _repo.ObtenerPorDocumento(documentoOCuit);
         return Ok(afi);
     }
-    // POST /api/afiliados/{dni}/enviar-codigo
     [HttpPost("{dni}/enviar-codigo")]
     public async Task<IActionResult> EnviarCodigo(string dni)
     {
         await _repo.EnviarCodigo(dni);
         return Ok();
     }
-    // POST /api/afiliados/{dni}/verificar
     [HttpPost("{dni}/verificar")]
     public async Task<ActionResult<ResultadoDTO>> VerificarCodigo(string dni, [FromBody] JsonElement body)
     {

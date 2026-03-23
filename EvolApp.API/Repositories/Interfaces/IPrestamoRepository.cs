@@ -1,7 +1,9 @@
 ﻿using Dapper;
 using EvolApp.Shared.DTOs;
 using EvolAppSocios.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Data;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace EvolApp.API.Repositories.Interfaces;
@@ -23,5 +25,5 @@ public interface IPrestamoRepository
         );
     Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro);
     Task<dynamic> AltaEvolPrestamos(string json);
-    Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string cuit);
+    Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string json);
 }

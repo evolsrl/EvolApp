@@ -142,11 +142,11 @@ public class PrestamoRepository : IPrestamoRepository
             commandType: CommandType.StoredProcedure);
         return result;
     }
-    public async Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string cuit)
+    public async Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string json)
     {
         var rows = await _db.QueryAsync<dynamic>(
             "EVOLApiPrePrestamosConsultar",
-            new { Cuil = cuit },
+            new { Json = json },
             commandType: CommandType.StoredProcedure);
 
         var lista = new List<dynamic>();

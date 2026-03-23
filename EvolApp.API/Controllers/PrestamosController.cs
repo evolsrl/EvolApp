@@ -219,10 +219,10 @@ public class PrestamosController : ControllerBase
     /// </remarks>
     /// <param name="cuit"></param>
     /// <returns></returns>
-    [HttpGet("prestamos/consultar/{cuit}")]
-    public async Task<IActionResult> Consultar(string cuit)
+    [HttpGet("prestamos/consultar")]
+    public async Task<IActionResult> Consultar([FromBody] JsonElement json)
     {
-        var prestamos = await _repo.ConsultaEvolPrestamos(cuit);
+        var prestamos = await _repo.ConsultaEvolPrestamos(json.GetRawText());
 
         if (prestamos == null || !prestamos.Any())
             return NotFound(new { exito = false, mensaje = "No se encontraron préstamos para el CUIT indicado." });

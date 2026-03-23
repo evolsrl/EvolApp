@@ -8,9 +8,7 @@ public class CargosController : ControllerBase
 {
     private readonly ICargosRepository _repo;
     public CargosController(ICargosRepository repo) => _repo = repo;
-    // GET /api/cargos/pendientes/{cuit}
     [HttpGet("pendientes/{cuit}")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<List<CargosDto>>> ObtenerCargosPendientes([FromRoute] string cuit)
     {
         if (string.IsNullOrWhiteSpace(cuit))
@@ -20,9 +18,7 @@ public class CargosController : ControllerBase
 
         return Ok(result);
     }
-    // GET /api/cargos/cuenta-corriente/{cuit}
     [HttpGet("cuenta-corriente/{cuit}")]
-    [ApiExplorerSettings(IgnoreApi = true)]
     public async Task<ActionResult<List<CargosDto>>> ObtenerCuentaCorrienteCargos([FromRoute] string cuit)
     {
         if (string.IsNullOrWhiteSpace(cuit))

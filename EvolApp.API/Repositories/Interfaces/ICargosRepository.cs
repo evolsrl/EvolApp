@@ -4,7 +4,8 @@ namespace EvolApp.API.Repositories.Interfaces
 {
     public interface ICargosRepository
     {
-        Task<List<CargosDto>> ObtenerCargosPendientes(string cuit);
-        Task<List<CargosDto>> ObtenerCuentaCorrienteCargos(string cuit);
+        Task<IEnumerable<dynamic>> ObtenerCargosPendientes(string cuit);
+        Task<IEnumerable<dynamic>> ObtenerCuentaCorrienteCargos(string cuit);
+        Task<dynamic> ObtenerCuentaCorrienteCargosContratados(string cuit);
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Dapper;
 using EvolApp.API.Repositories.Interfaces;
-using EvolApp.Shared.DTOs;
-using EvolAppSocios.Models;
 using System.Data;
-using System.Dynamic;
 using System.Text.Json;
 namespace EvolApp.API.Repositories
 {
@@ -11,9 +8,9 @@ namespace EvolApp.API.Repositories
     {
         private readonly IDbConnection _db;
         public CargosRepository(IDbConnection db) => _db = db;
-        public async Task<List<CargosDto>> ObtenerCargosPendientes(string cuit)
+        public async Task<IEnumerable<dynamic>> ObtenerCargosPendientes(string cuit)
         {
-            var cargos = await _db.QueryAsync<CargosDto>(
+            var cargos = await _db.QueryAsync<dynamic>(
                 "EvolAppApiCarCuentasCorrientesSeleccionarPendientesPorAfiliadoDataTable",
                 new
                 {
@@ -24,9 +21,9 @@ namespace EvolApp.API.Repositories
 
             return cargos.ToList();
         }
-        public async Task<List<CargosDto>> ObtenerCuentaCorrienteCargos(string cuit)
+        public async Task<IEnumerable<dynamic>> ObtenerCuentaCorrienteCargos(string cuit)
         {
-            var cargos = await _db.QueryAsync<CargosDto>(
+            var cargos = await _db.QueryAsync<dynamic>(
                 "EvolAppApiCarCuentasCorrientesSeleccionarCuentaCorrientePorAfiliadoDataTable",
                 new
                 {
@@ -36,6 +33,19 @@ namespace EvolApp.API.Repositories
             );
 
             return cargos.ToList();
+        }
+        public async Task<dynamic> ObtenerCuentaCorrienteCargosContratados(string cuit)
+        {
+            var json = await _db.ExecuteScalarAsync<string>(
+                "dbo.EvolApiCarCuentasCorrientesSeleccionarCargosContratadosPorAfiliadoDataTable",
+                new { cuit },
+                commandType: CommandType.StoredProcedure
+            );
+
+            if (string.IsNullOrWhiteSpace(json))
+                json = "[]";
+
+            return JsonSerializer.Deserialize<JsonElement>(json);
         }
     }
 }

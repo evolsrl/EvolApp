@@ -217,9 +217,15 @@ public class PrestamosController : ControllerBase
     /// <remarks>
     /// Devuelve la lista de préstamos asociados al CUIT indicado, con el detalle de las cuotas y el estado e importe cobrado de cada una.
     /// </remarks>
+    /// <code>
+    /// {
+    ///     "CUIL": "20123456789",
+    ///     "NroDeIdentificacion": "12345"
+    /// }
+    /// </code>
     /// <param name="cuit"></param>
     /// <returns></returns>
-    [HttpGet("prestamos/consultar")]
+    [HttpPost("prestamos/consultar")]
     public async Task<IActionResult> Consultar([FromBody] JsonElement json)
     {
         var prestamos = await _repo.ConsultaEvolPrestamos(json.GetRawText());

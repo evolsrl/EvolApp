@@ -18,6 +18,6 @@ namespace EvolApp.API.Repositories.Interfaces
         Task<ResultadoDTO> ActualizarEvolSocios(string json);
         Task<ResultadoDTO> ExisteEvolSocios(string cuit);
         Task<dynamic> ConsultaEvolSocios(string cuit);
-        //Task<AfiliadoDto?> AltaSocio(string documentoOCuit);
+        Task<IEnumerable<dynamic>> ConsultaEvolSociosBase(string? estados, int pagina, int cantidad);
     }
 }

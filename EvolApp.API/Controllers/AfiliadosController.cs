@@ -2,8 +2,9 @@
 using EvolApp.Shared.DTOs;
 using EvolAppSocios.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.VisualBasic;
+using System.Text.Json;
 
 
 [ApiController]
@@ -420,4 +421,41 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
 
+    [HttpPost("listar")]
+    public async Task<IActionResult> ConsultaEvolSociosBase(
+    [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] JsonElement? json = null)
+    {
+        string? estados = null;
+        int pagina = 1;
+        int cantidad = 50;
+
+        if (json.HasValue && json.Value.ValueKind == JsonValueKind.Object)
+        {
+            if (json.Value.TryGetProperty("estados", out var estadosProp) &&
+                estadosProp.ValueKind != JsonValueKind.Null &&
+                estadosProp.ValueKind != JsonValueKind.Undefined)
+            {
+                estados = estadosProp.GetString();
+            }
+
+            if (json.Value.TryGetProperty("pagina", out var paginaProp) &&
+                paginaProp.ValueKind == JsonValueKind.Number &&
+                paginaProp.TryGetInt32(out var paginaValue) &&
+                paginaValue > 0)
+            {
+                pagina = paginaValue;
+            }
+
+            if (json.Value.TryGetProperty("cantidad", out var cantidadProp) &&
+                cantidadProp.ValueKind == JsonValueKind.Number &&
+                cantidadProp.TryGetInt32(out var cantidadValue) &&
+                cantidadValue > 0)
+            {
+                cantidad = cantidadValue;
+            }
+        }
+
+        var result = await _repo.ConsultaEvolSociosBase(estados, pagina, cantidad);
+        return Ok(result);
+    }
 }

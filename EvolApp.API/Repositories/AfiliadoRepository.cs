@@ -279,5 +279,82 @@ namespace EvolApp.API.Repositories
                 commandType: CommandType.StoredProcedure);
             return result;
         }
+
+        public async Task<IEnumerable<dynamic>> ConsultaEvolSociosBase(string? estados, int pagina, int cantidad)
+        {
+            var rows = (await _db.QueryAsync<dynamic>(
+                "dbo.EVOLApiAfiAfiliadosListar",
+                new
+                {
+                    Estados = estados,
+                    Pagina = pagina,
+                    Cantidad = cantidad
+                },
+                commandType: CommandType.StoredProcedure)).ToList();
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var resultado = new List<dynamic>();
+
+            foreach (var row in rows)
+            {
+                var dicOrigen = (IDictionary<string, object>)row;
+
+                dynamic item = new ExpandoObject();
+                var dicDestino = (IDictionary<string, object>)item;
+
+                foreach (var kv in dicOrigen)
+                {
+                    dicDestino[kv.Key] = kv.Value;
+                }
+
+                if (dicOrigen.TryGetValue("Domicilio", out var domObj) &&
+                    domObj is string domStr &&
+                    !string.IsNullOrWhiteSpace(domStr))
+                {
+                    dicDestino["Domicilios"] =
+                        JsonSerializer.Deserialize<List<ExpandoObject>>(domStr, jsonOptions) ?? new List<ExpandoObject>();
+                }
+                else
+                {
+                    dicDestino["Domicilios"] = new List<ExpandoObject>();
+                }
+
+                if (dicOrigen.TryGetValue("Telefono", out var telObj) &&
+                    telObj is string telStr &&
+                    !string.IsNullOrWhiteSpace(telStr))
+                {
+                    dicDestino["Telefonos"] =
+                        JsonSerializer.Deserialize<List<ExpandoObject>>(telStr, jsonOptions) ?? new List<ExpandoObject>();
+                }
+                else
+                {
+                    dicDestino["Telefonos"] = new List<ExpandoObject>();
+                }
+
+                if (dicOrigen.TryGetValue("FormasCobro", out var fcObj) &&
+                    fcObj is string fcStr &&
+                    !string.IsNullOrWhiteSpace(fcStr))
+                {
+                    dicDestino["FormasCobros"] =
+                        JsonSerializer.Deserialize<List<ExpandoObject>>(fcStr, jsonOptions) ?? new List<ExpandoObject>();
+                }
+                else
+                {
+                    dicDestino["FormasCobros"] = new List<ExpandoObject>();
+                }
+
+                dicDestino.Remove("Domicilio");
+                dicDestino.Remove("Telefono");
+                dicDestino.Remove("FormasCobro");
+
+                resultado.Add(item);
+            }
+
+            return resultado;
+        }
     }
 }

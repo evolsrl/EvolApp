@@ -17,6 +17,13 @@ public class CargosController : ControllerBase
 
         return Ok(result);
     }
+    /// <summary>
+    /// Listado de cargos/servicios devengados en la cuenta corriente de un afiliado
+    /// </summary>
+    /// <remarks>
+    /// Devuelve un listado cargos/servicios devengados en la cuenta corriente.
+    /// </remarks>
+    /// <returns></returns>
     [HttpGet("cuenta-corriente/{cuit}")]
     public async Task<IActionResult> ObtenerCuentaCorrienteCargos([FromRoute] string cuit)
     {
@@ -27,6 +34,13 @@ public class CargosController : ControllerBase
 
         return Ok(result);
     }
+    /// <summary>
+    /// Cargos/Servicos pendientes de pago de un afiliado
+    /// </summary>
+    /// <remarks>
+    /// Devuelve un listado de cargos/servicois que el socio tiene contratados.
+    /// </remarks>
+    /// <returns></returns>
     [HttpGet("cargos-contratados/{cuit}")]
     public async Task<IActionResult> ObtenerCuentaCorrienteCargosContratados([FromRoute] string cuit)
     {

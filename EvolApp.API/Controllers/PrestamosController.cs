@@ -219,18 +219,21 @@ public class PrestamosController : ControllerBase
     /// </remarks>
     /// <code>
     /// {
-    ///     "CUIL": "20123456789",
-    ///     "NroDeIdentificacion": "12345"
+    ///   "CUIL": "20123456789",
+    ///   "NroDeIdentificacion": "12345"
     /// }
     /// </code>
-    /// <param name="cuit"></param>
+    /// <param name="json"></param>
     /// <returns></returns>
     [HttpPost("prestamos/consultar")]
     public async Task<IActionResult> Consultar([FromBody] JsonElement json)
     {
+        if (json.ValueKind == JsonValueKind.Undefined || json.ValueKind == JsonValueKind.Null)
+            return BadRequest(new { exito = false, mensaje = "Body requerido." });
+
         var prestamos = await _repo.ConsultaEvolPrestamos(json.GetRawText());
 
-        if (prestamos == null || !prestamos.Any())
+        if (prestamos.ValueKind == JsonValueKind.Array && prestamos.GetArrayLength() == 0)
             return NotFound(new { exito = false, mensaje = "No se encontraron préstamos para el CUIT indicado." });
 
         return Ok(prestamos);

@@ -142,58 +142,18 @@ public class PrestamoRepository : IPrestamoRepository
             commandType: CommandType.StoredProcedure);
         return result;
     }
-    public async Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string json)
+    public async Task<JsonElement> ConsultaEvolPrestamos(string json)
     {
-        var rows = await _db.QueryAsync<dynamic>(
-            "EVOLApiPrePrestamosConsultar",
+        var resultadoJson = await _db.ExecuteScalarAsync<string>(
+            "dbo.EVOLApiPrePrestamosConsultar",
             new { Json = json },
-            commandType: CommandType.StoredProcedure);
+            commandType: CommandType.StoredProcedure
+        );
 
-        var lista = new List<dynamic>();
+        if (string.IsNullOrWhiteSpace(resultadoJson))
+            resultadoJson = "[]";
 
-        var jsonOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        };
-
-        foreach (var row in rows)
-        {
-            var dicOrigen = (IDictionary<string, object>)row;
-
-            dynamic item = new ExpandoObject();
-            var dicDestino = (IDictionary<string, object>)item;
-
-            // Copio todas las columnas tal cual
-            foreach (var kv in dicOrigen)
-            {
-                // Manejar DBNull para que no explote el JSON
-                dicDestino[kv.Key] = kv.Value is DBNull ? null : kv.Value;
-            }
-
-            // Parseo JSON de Cuotas (que viene como NVARCHAR(MAX) del SP)
-            if (dicOrigen.TryGetValue("Cuotas", out var cuotasObj)
-                && cuotasObj is string cuotasStr
-                && !string.IsNullOrWhiteSpace(cuotasStr))
-            {
-                try
-                {
-                    var cuotas = JsonSerializer.Deserialize<List<ExpandoObject>>(cuotasStr, jsonOptions);
-
-                    // Si deserializa bien, reemplazo la propiedad
-                    if (cuotas != null)
-                        dicDestino["Cuotas"] = cuotas;
-                }
-                catch
-                {
-                    // Si por alguna razón falla el parseo, dejo el string original
-                    // para no romper el endpoint.
-                }
-            }
-
-            lista.Add(item);
-        }
-
-        return lista;
+        return JsonSerializer.Deserialize<JsonElement>(resultadoJson);
     }
-    
+
 }

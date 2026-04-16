@@ -25,5 +25,5 @@ public interface IPrestamoRepository
         );
     Task<IEnumerable<PrestamosPlanesDto>> ObtenerPlanesPorFormaCobro(string formaCobro);
     Task<dynamic> AltaEvolPrestamos(string json);
-    Task<IEnumerable<dynamic>> ConsultaEvolPrestamos(string json);
+    Task<JsonElement> ConsultaEvolPrestamos(string json);
 }

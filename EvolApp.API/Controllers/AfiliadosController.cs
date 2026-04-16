@@ -254,6 +254,7 @@ public class AfiliadosController : ControllerBase
     /// Agrega un afiliado
     /// </summary>
     /// <remarks>
+    /// Json de Ejemplo para dar de alta un Afiliado
     /// <code>
     ///     {
     ///        "Nombre": "JORGE ANTONIO",
@@ -421,6 +422,19 @@ public class AfiliadosController : ControllerBase
         return Ok(res);
     }
 
+    /// <summary>
+    /// Listado de Afiliados por estado
+    /// </summary>
+    /// <remarks>
+    /// Devuelve un listado de Afiliados. Se puede filtrar por uno o mas estados separador por coma. Se puede solicitar por cantidad y pagina.
+    /// Ejemplo:
+    /// {
+    ///     "Estados": "2,29",
+    ///     "Pagina": "1"
+    ///     "Cantidad": "500"
+    /// }
+    /// </remarks>
+    /// <returns></returns>
     [HttpPost("listar")]
     public async Task<IActionResult> ConsultaEvolSociosBase(
     [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] JsonElement? json = null)

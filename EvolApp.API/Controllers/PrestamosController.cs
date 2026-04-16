@@ -126,6 +126,8 @@ public class PrestamosController : ControllerBase
     /// Agregar préstamo a la cuenta de un afiliado.
     /// </summary>
     /// <remarks>
+    /// <para></para>
+    /// <para>Ejemplo de Json</para>
     /// <code>
     /// {
     ///    "Nombre": "HUGO TEST API",
@@ -215,14 +217,19 @@ public class PrestamosController : ControllerBase
     /// Consulta de préstamos asociados a un CUIT.
     /// </summary>
     /// <remarks>
-    /// Devuelve la lista de préstamos asociados al CUIT indicado, con el detalle de las cuotas y el estado e importe cobrado de cada una.
-    /// </remarks>
+    /// <para>Devuelve la lista de préstamos asociados al CUIT indicado, con el detalle de las cuotas y el estado e importe cobrado de cada una.</para>
+    /// <para>Ejemplo de Json: El Nro de identificación puede ser opcional.</para>
     /// <code>
     /// {
     ///   "CUIL": "20123456789",
     ///   "NroDeIdentificacion": "12345"
     /// }
+    /// {
+    ///     "CUIL": "20123456789",
+    ///     "NroDeIdentificacion": ""
+    /// }
     /// </code>
+    /// </remarks>
     /// <param name="json"></param>
     /// <returns></returns>
     [HttpPost("prestamos/consultar")]

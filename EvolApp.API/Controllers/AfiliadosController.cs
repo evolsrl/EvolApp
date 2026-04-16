@@ -426,13 +426,15 @@ public class AfiliadosController : ControllerBase
     /// Listado de Afiliados por estado
     /// </summary>
     /// <remarks>
-    /// Devuelve un listado de Afiliados. Se puede filtrar por uno o mas estados separador por coma. Se puede solicitar por cantidad y pagina.
-    /// Ejemplo:
+    /// <para>Devuelve un listado de Afiliados. Se puede filtrar por uno o mas estados separador por coma. Se puede solicitar por cantidad y pagina.</para>
+    /// <para>Ejemplo:</para>
+    /// <code>
     /// {
-    ///     "Estados": "2,29",
-    ///     "Pagina": "1"
-    ///     "Cantidad": "500"
+    ///     "estados": "2,29",
+    ///     "pagina": "1",
+    ///     "cantidad": "50"
     /// }
+    /// </code>
     /// </remarks>
     /// <returns></returns>
     [HttpPost("listar")]

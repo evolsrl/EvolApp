@@ -224,6 +224,7 @@ public class PrestamosController : ControllerBase
     ///   "CUIL": "20123456789",
     ///   "NroDeIdentificacion": "12345"
     /// }
+    /// 
     /// {
     ///     "CUIL": "20123456789",
     ///     "NroDeIdentificacion": ""

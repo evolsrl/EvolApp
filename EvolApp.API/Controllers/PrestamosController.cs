@@ -129,84 +129,31 @@ public class PrestamosController : ControllerBase
     /// <para></para>
     /// <para>Ejemplo de Json</para>
     /// <code>
-    /// {
-    ///    "Nombre": "HUGO TEST API",
-    ///    "Apellido": "REYNOSO",
-    ///    "TipoDocumento": "DNI",
-    ///    "NumeroDocumento": 44320332,
-    ///    "CUIL": 20443203320,
-    ///    "NumeroSocio": "101172/00",
-    ///    "NumeroLegajo": 1435,
-    ///    "Sexo": "Masculino",
-    ///    "FechaNacimiento": "1973-05-31T00:00:00",
-    ///    "FechaIngreso": "2009-03-20T00:00:00",
-    ///    "TipoPersona": "Fisica",
-    ///    "AfiliadoTipo": "Titular",
-    ///    "EstadoCivil": "Casado/a",
-    ///    "CorreoElectronico": "NO TIENE",
-    ///    "Categoria": "Activo",
-    ///    "Estado": "Normal",
-    ///    "Dependencia": "",
-    ///    "Grado": "CAPITAN",
-    ///    "GrupoSanguineo": "A +",
-    ///    "CondicionFiscal": "Consumidor Final",
-    ///    "CBU": null,
-    ///    "Filial": "Filial Villa Ramallo",
-    ///    "Detalle":"Este es un testing de detalle, lo hago largo para verificar longitud.",
-    ///    "Domicilios": [
-    ///        {
-    ///            "IdDomicilio": 96352,
-    ///            "IdDomicilioTipo": 1,
-    ///            "DomicilioTipo": "Particular",
-    ///            "Calle": "RAFAEL OBLIGADO 2",
-    ///            "Numero": 19613,
-    ///            "Piso": 4,
-    ///            "Departamento": "03",
-    ///            "IdCodigoPostal": 16862,
-    ///            "IdProvincia": 2,
-    ///            "Provincia": "Buenos Aires",
-    ///            "Localidad": "RAMALLO",
-    ///            "Predeterminado": true,
-    ///            "IdEstado": 1,
-    ///            "CodigoPostal": "2915"
-    ///        }
-    ///    ],
-    ///    "Telefonos": [
-    ///        {
-    ///            "IdTelefono": 95546,
-    ///            "IdTelefonoTipo": 1,
-    ///            "Numero": 3407437164,
-    ///            "Interno": 0,
-    ///            "IdEstado": 1
-    ///        },
-    ///        {
-    ///    "IdTelefono": 95547,
-    ///            "IdTelefonoTipo": 1,
-    ///            "Numero": 5493407467968,
-    ///            "Interno": 0,
-    ///            "IdEstado": 1
-    ///        }
-    ///    ],
-    ///    "FormasCobros": [
-    ///        {
-    ///            "FormaCobro": "Caja",
-    ///            "Predeterminado": false,
-    ///            "IdEstado": 1,
-    ///            "IdFormaCobroAfiliado": 63432
-    ///        },
-    ///        {
-    ///    "FormaCobro": "FIPLASTO S.A. SINDIC",
-    ///            "Predeterminado": true,
-    ///            "IdEstado": 1,
-    ///            "IdFormaCobroAfiliado": 63433
-    ///        }
-    ///    ]
+    /// {    
+    ///  "TipoDocumento": "DNI",      
+    ///  "NumeroDocumento": 24127544,      
+    ///  "CUIL": "20241275443",      
+    ///  "NumeroSocio": "18941",      
+    ///  "NroDeIdentificacion": "",      
+    ///  "FechaPrestamo": "2026-03-09T00:00:00",      
+    ///  "ImporteSolicitado": 380000.00,
+    ///  "CantidadDeCuotas": 12,  
+    ///  "ImporteCuota": 0, 
+    ///  "PrimerVencimiento": "2026-06-20",      
+    ///  "PeriodoPrimerVencimiento": "202606",      
+    ///  "FormaDeCobro": "913 - RAPIPAGO",      
+    ///  "Filial": "Sede Central - 684",        
+    ///  "FilialPago": "Sede Central - 684",        
+    ///  "PrestamoPlan": "27 - Ayuda Coronavirus",      
+    ///  "PrestamoPlanTasa": "83.000000",      
+    ///  "TipoOperacion": "Prestamo Interes Directo",      
+    ///  "TipoCargo": "27 - Ayuda Coronavirus" 
     ///}
     ///</code>
     /// </remarks>
     /// <param name="json"></param>
     /// <returns></returns>
-    [HttpPost("prestamos/agregar")]
+[HttpPost("prestamos/agregar")]
     public async Task<IActionResult> Agregar([FromBody] JsonElement json)
     {
         var res = await _repo.AltaEvolPrestamos(json.GetRawText());
